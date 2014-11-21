@@ -192,7 +192,10 @@ public abstract class AbstractIntegrationTest {
                 vmOption("-XX:PermSize=128M"),
                 vmOption("-XX:MaxPermSize=512M"),
                 // avoid integration tests stealing focus on OS X
-                vmOption("-Djava.awt.headless=true")
+                vmOption("-Djava.awt.headless=true"),
+                vmOption("-javaagent:" + System.getProperty("user.home") +
+                        "/.m2/repository/org/ekstazi/org.ekstazi.core/4.3.0/org.ekstazi.core-4.3" +
+                        ".0.jar=mode=single,root.dir=/tmp/,dependencies.format=txt")
         );
     }
 
