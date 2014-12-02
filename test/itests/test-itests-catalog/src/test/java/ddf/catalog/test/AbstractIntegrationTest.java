@@ -23,6 +23,9 @@ import org.apache.karaf.shell.osgi.BlueprintListener;
 import org.apache.karaf.shell.osgi.BlueprintListener.BlueprintState;
 import org.junit.Rule;
 import org.junit.rules.TestName;
+import org.junit.rules.TestRule;
+import org.junit.runner.Description;
+import org.junit.runners.model.Statement;
 import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.karaf.options.LogLevelOption;
 import org.osgi.framework.Bundle;
@@ -57,15 +60,7 @@ import java.util.concurrent.TimeUnit;
 
 import static com.jayway.restassured.RestAssured.get;
 import static org.junit.Assert.fail;
-import static org.ops4j.pax.exam.CoreOptions.junitBundles;
-import static org.ops4j.pax.exam.CoreOptions.maven;
-import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
-import static org.ops4j.pax.exam.CoreOptions.options;
-import static org.ops4j.pax.exam.CoreOptions.systemProperty;
-import static org.ops4j.pax.exam.CoreOptions.systemTimeout;
-import static org.ops4j.pax.exam.CoreOptions.vmOption;
-import static org.ops4j.pax.exam.CoreOptions.when;
-import static org.ops4j.pax.exam.CoreOptions.wrappedBundle;
+import static org.ops4j.pax.exam.CoreOptions.*;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.editConfigurationFileExtend;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.editConfigurationFilePut;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.karafDistributionConfiguration;
@@ -113,6 +108,9 @@ public abstract class AbstractIntegrationTest {
 
     @Rule
     public TestName testName = new TestName();
+
+    @Rule
+    public EkstaziRule ekstaziRule = new EkstaziRule();
 
     @Inject
     protected BundleContext bundleCtx;
@@ -193,9 +191,10 @@ public abstract class AbstractIntegrationTest {
                 vmOption("-XX:MaxPermSize=512M"),
                 // avoid integration tests stealing focus on OS X
                 vmOption("-Djava.awt.headless=true"),
+                wrappedBundle(mavenBundle().groupId("org.ekstazi").artifactId("org.ekstazi.core").version("4.3.1"))
+                        .exports("*"),
                 vmOption("-javaagent:" + System.getProperty("user.home") +
-                        "/.m2/repository/org/ekstazi/org.ekstazi.core/4.3.0/org.ekstazi.core-4.3" +
-                        ".0.jar=mode=single,root.dir=/tmp/,dependencies.format=txt")
+                        "/.m2/repository/org/ekstazi/org.ekstazi.core/4.3.1/org.ekstazi.core-4.3.1.jar=mode=multi,root.dir=/tmp/,dependencies.format=txt,dependencies.ignored.paths=target/exam")
         );
     }
 
@@ -484,6 +483,30 @@ public abstract class AbstractIntegrationTest {
 
         public boolean isUpdated() {
             return updated;
+        }
+    }
+
+    public class EkstaziRule implements TestRule {
+
+        @Override
+        public Statement apply(final Statement statement, final Description description) {
+            return new Statement() {
+                @Override
+                public void evaluate() throws Throwable {
+                    String name = description.getClassName() + "-" + description.getMethodName();
+                    if (org.ekstazi.Ekstazi.inst().checkIfAffected(name)) {
+                        org.ekstazi.Ekstazi.inst().startCollectingDependencies(name);
+                        try {
+                            // Collecting dependencies for code here.
+                            statement.evaluate();
+                        } finally {
+                            org.ekstazi.Ekstazi.inst().finishCollectingDependencies(name);
+                        }
+                    } else {
+                        LOGGER.info("Test {} unchanged, skipping", description.getMethodName());
+                    }
+                }
+            };
         }
     }
 
