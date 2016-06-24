@@ -49,6 +49,16 @@ public class DerivedContentActionProvider implements ActionProvider {
     }
 
     @Override
+    public <T> Action getAction(T subject) {
+        List<Action> actions = getActions(subject);
+        if (actions.size() > 0) {
+            return actions.get(0);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
     public <T> List<Action> getActions(T input) {
         if (!canHandle(input)) {
             return Collections.emptyList();

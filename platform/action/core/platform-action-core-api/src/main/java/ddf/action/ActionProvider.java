@@ -13,21 +13,30 @@
  */
 package ddf.action;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
- * This class provides an {@link Action} for a given subject. Objects that the
+ * This class provides {@link Action}s for a given subject. Objects that the
  * {@link ActionProvider} can handle are not restricted to a particular class and can be whatever
  * the {@link ActionProvider} is able to handle. <br>
  *
- *
  * @see Action
  * @see ActionRegistry
- *
- * <b> This code is experimental. While this interface is functional and tested, it may change or be
- * removed in a future version of the library. </b>
  */
 public interface ActionProvider {
+
+    /**
+     *
+     * @param subject
+     *            object for which the {@link ActionProvider} is requested to provide an
+     *            {@link Action}
+     * @return an {@link Action} object. If no action can be taken on the input, then
+     *         <code>null</code> shall be returned
+     *
+     * @deprecated replaced by {@link #getActions(T subject)}
+     */
+    @Deprecated <T> Action getAction(T subject);
 
     /**
      * @param subject object for which the {@link ActionProvider} is requested to provide an
@@ -35,7 +44,9 @@ public interface ActionProvider {
      * @return an {@link Action} object. If no action can be taken on the input, then
      * <code>Collections.emptyList()</code> shall be returned
      */
-    <T> List<Action> getActions(T subject);
+    default <T> List<Action> getActions(T subject) {
+        return Collections.singletonList(getAction(subject));
+    }
 
     /**
      * @return a unique identifier to distinguish the type of service this {@link ActionProvider}
@@ -48,6 +59,8 @@ public interface ActionProvider {
      * @param subject the input to check
      * @return true if is supported, false otherwise.
      */
-    <T> boolean canHandle(T subject);
+    default <T> boolean canHandle(T subject) {
+        return true;
+    }
 
 }

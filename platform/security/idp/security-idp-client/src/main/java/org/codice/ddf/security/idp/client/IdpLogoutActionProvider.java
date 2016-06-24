@@ -43,6 +43,16 @@ public class IdpLogoutActionProvider implements ActionProvider {
 
     EncryptionService encryptionService;
 
+    @Override
+    public <T> Action getAction(T subject) {
+        List<Action> actions = getActions(subject);
+        if (actions.size() > 0) {
+            return actions.get(0);
+        } else {
+            return null;
+        }
+    }
+
     /***
      * @param <T>             is a Map<String, Subject>
      * @param realmSubjectMap containing a realm of "idp" with the corresponding subject

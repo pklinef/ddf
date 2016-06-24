@@ -67,6 +67,16 @@ public abstract class AbstractMetacardActionProvider implements ActionProvider {
         this.description = description;
     }
 
+    @Override
+    public <T> Action getAction(T subject) {
+        List<Action> actions = getActions(subject);
+        if (actions.size() > 0) {
+            return actions.get(0);
+        } else {
+            return null;
+        }
+    }
+
     /**
      * Default implementation that ensures the {@code subject} provided is a {@link Metacard}
      * with a valid ID before delegating to {@link #getMetacardAction(String, Metacard)}.

@@ -79,6 +79,16 @@ public class RegistryPublicationActionProvider implements ActionProvider {
     private RegistryPublicationManager registryPublicationManager;
 
     @Override
+    public <T> Action getAction(T subject) {
+        List<Action> actions = getActions(subject);
+        if (actions.size() > 0) {
+            return actions.get(0);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
     public <T> List<Action> getActions(T subject) {
         String registryIdToPublish = getRegistryId(subject);
         if (StringUtils.isBlank(registryIdToPublish)) {

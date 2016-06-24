@@ -65,6 +65,16 @@ public class RegistryReportActionProvider implements ActionProvider {
         this.actionProviderId = id;
     }
 
+    @Override
+    public <T> Action getAction(T subject) {
+        List<Action> actions = getActions(subject);
+        if (actions.size() > 0) {
+            return actions.get(0);
+        } else {
+            return null;
+        }
+    }
+
     public <T> List<Action> getActions(T subject) {
 
         if (canHandle(subject)) {
