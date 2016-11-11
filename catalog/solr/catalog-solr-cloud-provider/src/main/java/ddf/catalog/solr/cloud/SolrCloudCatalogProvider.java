@@ -36,7 +36,7 @@ public class SolrCloudCatalogProvider extends RemoteSolrCatalogProvider {
 
     @Override
     protected Future<SolrClient> createClient() {
-        return SolrCloudClientFactory.getClient(Optional.ofNullable(url)
+        return SolrCloudClientFactory.getClient(Optional.ofNullable(getUrl())
                 .orElse(SolrCloudClientFactory.DEFAULT_ZOOKEEPER_HOST), SOLR_CATALOG_CORE_NAME);
     }
 
