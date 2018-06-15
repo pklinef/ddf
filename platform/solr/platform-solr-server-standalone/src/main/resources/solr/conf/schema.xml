@@ -141,6 +141,7 @@
     <uniqueKey>id_txt</uniqueKey>
 
     <field name="lux_xml" type="binary" indexed="false" stored="true"/>
+    <field name="anyDate_tdt" type="tdate" indexed="true" stored="false" multiValued="true"/>
 
     <!-- Dynamic field definitions allow using convention over configuration
         for fields via the specification of patterns to match field names.
@@ -179,7 +180,6 @@
     <!--<dynamicField name="attr_*" type="text_general" indexed="true" stored="true" multiValued="true"/>-->
 
     <!--<dynamicField name="random_*" type="random" />-->
-
 
     <dynamicField name="*_int" type="tint" indexed="true" stored="true" multiValued="true"/>
     <dynamicField name="*_lng" type="tlong" indexed="true" stored="true" multiValued="true"/>
@@ -241,6 +241,11 @@
     <!-- Necessary for Spatial4j to work -->
     <copyField source="*_geo" dest="*_geo_index"/>
 
+    <!-- Support any* attributes -->
+    <copyField source="*_txt_tokenized" dest="anyText_txt_ws"/>
+    <copyField source="*_txt_tokenized" dest="anyText_txt_ws_has_case"/>
+    <copyField source="*_geo" dest="anyGeo_geo_index"/>
+    <copyField source="*_tdt" dest="anyDate_tdt"/>
 
     <!-- Above, multiple source fields are copied to the [text] field.
      Another way to map multiple source fields to the same

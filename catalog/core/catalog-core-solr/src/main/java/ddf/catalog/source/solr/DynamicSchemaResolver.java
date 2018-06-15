@@ -576,8 +576,16 @@ public class DynamicSchemaResolver {
   public String getField(
       String propertyName, AttributeFormat format, boolean isSearchedAsExactValue) {
 
+    if (Metacard.ANY_TEXT.equals(propertyName)) {
+      return Metacard.ANY_TEXT + "_txt";
+    }
+
     if (Metacard.ANY_GEO.equals(propertyName)) {
-      return Metacard.GEOGRAPHY + "_geo_index";
+      return Metacard.ANY_GEO + "_geo_index";
+    }
+
+    if (Metacard.ANY_DATE.equals(propertyName)) {
+      return Metacard.ANY_DATE + "_tdt";
     }
 
     String fieldName =
