@@ -316,8 +316,13 @@ public class DynamicSchemaResolver {
               solrInputDocument.addField(
                   formatIndexName + SchemaFields.SORT_KEY_SUFFIX,
                   createCenterPoint(attributeValues));
+            } else if (AttributeFormat.STRING.equals(format)) {
+              solrInputDocument.addField(
+                  formatIndexName + SchemaFields.SORT_KEY_SUFFIX,
+                  formatSortKey((String) attributeValues.get(0)));
             } else if (!(AttributeFormat.BINARY.equals(format)
-                || AttributeFormat.OBJECT.equals(format))) {
+                || AttributeFormat.OBJECT.equals(format)
+                || AttributeFormat.XML.equals(format))) {
               solrInputDocument.addField(
                   formatIndexName + SchemaFields.SORT_KEY_SUFFIX, attributeValues.get(0));
             }
@@ -366,6 +371,10 @@ public class DynamicSchemaResolver {
     }
 
     solrInputDocument.addField(SchemaFields.METACARD_TYPE_OBJECT_FIELD_NAME, metacardTypeBytes);
+  }
+
+  private String formatSortKey(String term) {
+    return StringUtils.substring(term.trim(), 0, 127).toLowerCase();
   }
 
   /*
