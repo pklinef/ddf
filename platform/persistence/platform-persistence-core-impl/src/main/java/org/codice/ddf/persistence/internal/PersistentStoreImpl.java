@@ -27,7 +27,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrRequest.METHOD;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.UpdateResponse;
@@ -156,7 +155,7 @@ public class PersistentStoreImpl implements PersistentStore {
       if (solrQuery == null) {
         throw new PersistenceException("Unsupported query " + cql);
       }
-      QueryResponse solrResponse = solrClient.query(solrQuery, METHOD.POST);
+      QueryResponse solrResponse = solrClient.query(solrQuery);
       long numResults = solrResponse.getResults().getNumFound();
       LOGGER.debug("numResults = {}", numResults);
 

@@ -61,7 +61,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrRequest.METHOD;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.SolrPingResponse;
@@ -345,7 +344,7 @@ public class SolrCatalogProvider extends MaskableImpl implements CatalogProvider
     QueryResponse idResults = null;
 
     try {
-      idResults = solr.query(query, METHOD.POST);
+      idResults = solr.query(query);
     } catch (SolrServerException | SolrException | IOException e) {
       LOGGER.info("Failed to query for metacard(s) before update.", e);
     }
@@ -559,7 +558,7 @@ public class SolrCatalogProvider extends MaskableImpl implements CatalogProvider
 
     QueryResponse solrResponse;
     try {
-      solrResponse = solr.query(query, METHOD.POST);
+      solrResponse = solr.query(query);
     } catch (SolrServerException | SolrException | IOException e) {
       LOGGER.info("Failed to get list of Solr documents for delete.", e);
       throw new IngestException(COULD_NOT_COMPLETE_DELETE_REQUEST_MESSAGE);

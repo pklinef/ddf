@@ -98,7 +98,7 @@ public class PersistentStoreImplTest {
     doc.addField("id_txt", "idvalue");
     docList.add(doc);
     when(response.getResults()).thenReturn(docList);
-    when(solrClient.query(any(), eq(SolrRequest.METHOD.POST))).thenReturn(response);
+    when(solrClient.query(any())).thenReturn(response);
     List<Map<String, Object>> items = persistentStore.get("testcore");
     assertThat(items.size(), equalTo(1));
     assertThat(items.get(0).get("id_txt"), equalTo("idvalue"));
