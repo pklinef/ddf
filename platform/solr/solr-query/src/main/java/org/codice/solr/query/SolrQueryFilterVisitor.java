@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
 public class SolrQueryFilterVisitor extends DefaultFilterVisitor {
 
   public static final String TOKENIZED_METADATA_FIELD =
-      "metadata_txt" + SchemaFieldResolver.TOKENIZED;
+      "metadata_txt" + SchemaFieldResolver.INDEXED + SchemaFieldResolver.TOKENIZED;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SolrQueryFilterVisitor.class);
 
@@ -65,7 +65,8 @@ public class SolrQueryFilterVisitor extends DefaultFilterVisitor {
 
   private static final Map<String, String> FIELD_MAP;
 
-  private static final String SPATIAL_INDEX = "_geo_index";
+  private static final String SPATIAL_INDEX =
+      SchemaFieldResolver.GEO_SUFFIX + SchemaFieldResolver.INDEXED;
 
   // key=solrCoreName.propertyName without suffix, e.g., "notification.user"
   // Since this FilterVisitor is used across multiple Solr cores and this cache map
@@ -237,6 +238,7 @@ public class SolrQueryFilterVisitor extends DefaultFilterVisitor {
 
     return propertyName
         + schemaFieldResolver.getFieldSuffix(format)
+        + SchemaFieldResolver.INDEXED
         + (isSearchedAsExactValue ? "" : getSpecialIndexSuffix(format));
   }
 
@@ -245,8 +247,6 @@ public class SolrQueryFilterVisitor extends DefaultFilterVisitor {
     switch (format) {
       case STRING:
         return SchemaFieldResolver.TOKENIZED;
-      case GEOMETRY:
-        return SchemaFieldResolver.INDEXED;
       case XML:
         return SchemaFieldResolver.TEXT_PATH;
       default:

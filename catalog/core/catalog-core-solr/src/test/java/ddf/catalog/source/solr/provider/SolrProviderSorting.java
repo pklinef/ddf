@@ -49,6 +49,7 @@ import org.geotools.filter.SortByImpl;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.opengis.filter.Filter;
 import org.opengis.filter.FilterFactory;
@@ -88,6 +89,7 @@ public class SolrProviderSorting {
 
   /** Test for a specific IRAD problem. */
   @Test
+  @Ignore("Enable after removing *_txt to *_txt_index copy field")
   public void testSortById() throws Exception {
 
     deleteAll(provider);

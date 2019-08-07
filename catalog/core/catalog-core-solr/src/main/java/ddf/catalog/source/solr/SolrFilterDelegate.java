@@ -360,8 +360,8 @@ public class SolrFilterDelegate extends FilterDelegate<SolrQuery> {
   private String wildcardSolrQuery(
       String searchPhrase, String propertyName, boolean isCaseSensitive, boolean isExact) {
     String solrQuery;
-    String tokenized = resolver.getSpecialIndexSuffix(AttributeFormat.STRING, enabledFeatures);
     if (Metacard.ANY_TEXT.equals(propertyName)) {
+      String tokenized = resolver.getSpecialIndexSuffix(AttributeFormat.STRING, enabledFeatures);
       solrQuery =
           resolver
               .anyTextFields()
@@ -384,7 +384,7 @@ public class SolrFilterDelegate extends FilterDelegate<SolrQuery> {
               .map(field -> field + ":" + searchPhrase)
               .collect(Collectors.joining(" "));
     } else {
-      String field = getMappedPropertyName(propertyName, AttributeFormat.STRING, true) + tokenized;
+      String field = getMappedPropertyName(propertyName, AttributeFormat.STRING, false);
       if (isCaseSensitive) {
         field = resolver.getCaseSensitiveField(field, enabledFeatures);
       }

@@ -189,22 +189,45 @@ public class DynamicSchemaResolver {
     this.schemaFields = new SchemaFields();
     metadataMaximumBytes = getMetadataSizeLimit();
     fieldsCache.add(Metacard.ID + SchemaFields.TEXT_SUFFIX);
-    fieldsCache.add(Metacard.ID + SchemaFields.TEXT_SUFFIX + SchemaFields.TOKENIZED);
     fieldsCache.add(
-        Metacard.ID + SchemaFields.TEXT_SUFFIX + SchemaFields.TOKENIZED + SchemaFields.HAS_CASE);
-    fieldsCache.add(Metacard.TAGS + SchemaFields.TEXT_SUFFIX);
+        Metacard.ID + SchemaFields.TEXT_SUFFIX + SchemaFields.INDEXED + SchemaFields.TOKENIZED);
+    fieldsCache.add(
+        Metacard.ID
+            + SchemaFields.TEXT_SUFFIX
+            + SchemaFields.INDEXED
+            + SchemaFields.TOKENIZED
+            + SchemaFields.HAS_CASE);
+    fieldsCache.add(Metacard.TAGS + SchemaFields.TEXT_SUFFIX + SchemaFields.INDEXED);
 
-    anyTextFieldsCache.add(Metacard.METADATA + SchemaFields.TEXT_SUFFIX);
+    anyTextFieldsCache.add(Metacard.METADATA + SchemaFields.TEXT_SUFFIX + SchemaFields.INDEXED);
     Set<String> basicTextAttributes =
         MetacardImpl.BASIC_METACARD
             .getAttributeDescriptors()
             .stream()
             .filter(descriptor -> BasicTypes.STRING_TYPE.equals(descriptor.getType()))
-            .map(stringDescriptor -> stringDescriptor.getName() + SchemaFields.TEXT_SUFFIX)
+            .map(
+                stringDescriptor ->
+                    stringDescriptor.getName() + SchemaFields.TEXT_SUFFIX + SchemaFields.INDEXED)
             .collect(Collectors.toSet());
     anyTextFieldsCache.addAll(basicTextAttributes);
-    fieldsCache.add(Validation.VALIDATION_ERRORS + SchemaFields.TEXT_SUFFIX);
-    fieldsCache.add(Validation.VALIDATION_WARNINGS + SchemaFields.TEXT_SUFFIX);
+
+    Set<String> basicAttributes =
+        MetacardImpl.BASIC_METACARD
+            .getAttributeDescriptors()
+            .stream()
+            .map(
+                descriptor ->
+                    getField(
+                        descriptor.getName(),
+                        descriptor.getType().getAttributeFormat(),
+                        true,
+                        Collections.emptyMap()))
+            .collect(Collectors.toSet());
+    fieldsCache.addAll(basicAttributes);
+
+    fieldsCache.add(Validation.VALIDATION_ERRORS + SchemaFields.TEXT_SUFFIX + SchemaFields.INDEXED);
+    fieldsCache.add(
+        Validation.VALIDATION_WARNINGS + SchemaFields.TEXT_SUFFIX + SchemaFields.INDEXED);
 
     fieldsCache.add(SchemaFields.METACARD_TYPE_FIELD_NAME);
     fieldsCache.add(SchemaFields.METACARD_TYPE_OBJECT_FIELD_NAME);
@@ -265,7 +288,7 @@ public class DynamicSchemaResolver {
       String key = e.getKey();
       fieldsCache.add(key);
       if (key.endsWith(SchemaFields.TEXT_SUFFIX)) {
-        anyTextFieldsCache.add(key);
+        anyTextFieldsCache.add(key + SchemaFields.INDEXED);
       }
     }
   }
@@ -291,10 +314,11 @@ public class DynamicSchemaResolver {
                   == null) {
             List<String> parsedTexts = parseTextFrom(attributeValues);
 
-            // parsedTexts => *_txt_tokenized
+            // parsedTexts => *_txt_index_tokenized
             String specialStringIndexName =
                 ad.getName()
                     + getFieldSuffix(AttributeFormat.STRING)
+                    + SchemaFields.INDEXED
                     + getSpecialIndexSuffix(AttributeFormat.STRING);
             solrInputDocument.addField(specialStringIndexName, parsedTexts);
           } else if (AttributeFormat.STRING.equals(format)
@@ -314,10 +338,11 @@ public class DynamicSchemaResolver {
             solrInputDocument.addField(
                 ad.getName() + getFieldSuffix(AttributeFormat.STRING), truncatedValues);
 
-            // *_txt_tokenized
+            // *_txt_index_tokenized
             solrInputDocument.addField(
                 ad.getName()
                     + getFieldSuffix(AttributeFormat.STRING)
+                    + SchemaFields.INDEXED
                     + getSpecialIndexSuffix(AttributeFormat.STRING),
                 attributeValues);
           } else if (AttributeFormat.OBJECT.equals(format)) {
@@ -569,6 +594,15 @@ public class DynamicSchemaResolver {
     return solrFieldName;
   }
 
+  public String resolveAttribute(String solrFieldName) {
+    int firstIndexOfUndercore = solrFieldName.indexOf(FIRST_CHAR_OF_SUFFIX);
+
+    if (firstIndexOfUndercore != -1) {
+      return solrFieldName.substring(0, firstIndexOfUndercore);
+    }
+    return solrFieldName;
+  }
+
   public boolean isPrivateField(String solrFieldName) {
     return PRIVATE_SOLR_FIELDS.contains(solrFieldName);
   }
@@ -584,7 +618,7 @@ public class DynamicSchemaResolver {
     ArrayList<String> list = new ArrayList<>();
 
     for (AttributeFormat format : AttributeFormat.values()) {
-      String fullFieldName = field + schemaFields.getFieldSuffix(format);
+      String fullFieldName = field + schemaFields.getFieldSuffix(format) + SchemaFields.INDEXED;
 
       if (fieldsCache.contains(fullFieldName)) {
         list.add(fullFieldName);
@@ -619,6 +653,7 @@ public class DynamicSchemaResolver {
     String fieldName =
         propertyName
             + fieldSuffix
+            + SchemaFields.INDEXED
             + (isSearchedAsExactValue ? "" : getSpecialIndexSuffix(format, enabledFeatures));
 
     if (fieldsCache.contains(fieldName)) {
@@ -697,8 +732,6 @@ public class DynamicSchemaResolver {
           return SchemaFields.PHONETICS;
         }
         return SchemaFields.TOKENIZED;
-      case GEOMETRY:
-        return SchemaFields.INDEXED;
       case XML:
         return SchemaFields.TEXT_PATH;
       default:
@@ -721,34 +754,51 @@ public class DynamicSchemaResolver {
     for (AttributeDescriptor ad : descriptors) {
 
       AttributeFormat format = ad.getType().getAttributeFormat();
-
-      fieldsCache.add(ad.getName() + schemaFields.getFieldSuffix(format));
-
       if (!getSpecialIndexSuffix(format).equals("")) {
         fieldsCache.add(
-            ad.getName() + schemaFields.getFieldSuffix(format) + getSpecialIndexSuffix(format));
+            ad.getName()
+                + schemaFields.getFieldSuffix(format)
+                + SchemaFields.INDEXED
+                + getSpecialIndexSuffix(format));
       }
 
       if (format.equals(AttributeFormat.STRING)) {
         fieldsCache.add(
             ad.getName()
                 + schemaFields.getFieldSuffix(format)
+                + SchemaFields.INDEXED
                 + getSpecialIndexSuffix(format)
                 + SchemaFields.HAS_CASE);
         fieldsCache.add(
-            ad.getName() + schemaFields.getFieldSuffix(format) + SchemaFields.PHONETICS);
-        anyTextFieldsCache.add(ad.getName() + schemaFields.getFieldSuffix(format));
+            ad.getName()
+                + schemaFields.getFieldSuffix(format)
+                + SchemaFields.INDEXED
+                + SchemaFields.PHONETICS);
+        anyTextFieldsCache.add(
+            ad.getName() + schemaFields.getFieldSuffix(format) + SchemaFields.INDEXED);
       }
 
       if (format.equals(AttributeFormat.XML)) {
-        fieldsCache.add(ad.getName() + SchemaFields.TEXT_SUFFIX + SchemaFields.TOKENIZED);
         fieldsCache.add(
             ad.getName()
                 + SchemaFields.TEXT_SUFFIX
+                + SchemaFields.INDEXED
+                + SchemaFields.TOKENIZED);
+        fieldsCache.add(
+            ad.getName()
+                + SchemaFields.TEXT_SUFFIX
+                + SchemaFields.INDEXED
                 + SchemaFields.TOKENIZED
                 + SchemaFields.HAS_CASE);
         fieldsCache.add(
-            ad.getName() + schemaFields.getFieldSuffix(format) + getSpecialIndexSuffix(format));
+            ad.getName()
+                + schemaFields.getFieldSuffix(format)
+                + SchemaFields.INDEXED
+                + getSpecialIndexSuffix(format));
+      }
+
+      if (!(format.equals(AttributeFormat.BINARY) || format.equals(AttributeFormat.OBJECT))) {
+        fieldsCache.add(ad.getName() + schemaFields.getFieldSuffix(format) + SchemaFields.INDEXED);
       }
     }
   }
@@ -763,20 +813,20 @@ public class DynamicSchemaResolver {
 
   private String findAnyMatchingNumericalField(String propertyName, String fieldSuffix) {
 
-    if (fieldsCache.contains(propertyName + SchemaFields.DOUBLE_SUFFIX)) {
-      return propertyName + SchemaFields.DOUBLE_SUFFIX;
+    if (fieldsCache.contains(propertyName + SchemaFields.DOUBLE_SUFFIX + SchemaFields.INDEXED)) {
+      return propertyName + SchemaFields.DOUBLE_SUFFIX + SchemaFields.INDEXED;
     }
-    if (fieldsCache.contains(propertyName + SchemaFields.FLOAT_SUFFIX)) {
-      return propertyName + SchemaFields.FLOAT_SUFFIX;
+    if (fieldsCache.contains(propertyName + SchemaFields.FLOAT_SUFFIX + SchemaFields.INDEXED)) {
+      return propertyName + SchemaFields.FLOAT_SUFFIX + SchemaFields.INDEXED;
     }
-    if (fieldsCache.contains(propertyName + SchemaFields.INTEGER_SUFFIX)) {
-      return propertyName + SchemaFields.INTEGER_SUFFIX;
+    if (fieldsCache.contains(propertyName + SchemaFields.INTEGER_SUFFIX + SchemaFields.INDEXED)) {
+      return propertyName + SchemaFields.INTEGER_SUFFIX + SchemaFields.INDEXED;
     }
-    if (fieldsCache.contains(propertyName + SchemaFields.LONG_SUFFIX)) {
-      return propertyName + SchemaFields.LONG_SUFFIX;
+    if (fieldsCache.contains(propertyName + SchemaFields.LONG_SUFFIX + SchemaFields.INDEXED)) {
+      return propertyName + SchemaFields.LONG_SUFFIX + SchemaFields.INDEXED;
     }
-    if (fieldsCache.contains(propertyName + SchemaFields.SHORT_SUFFIX)) {
-      return propertyName + SchemaFields.SHORT_SUFFIX;
+    if (fieldsCache.contains(propertyName + SchemaFields.SHORT_SUFFIX + SchemaFields.INDEXED)) {
+      return propertyName + SchemaFields.SHORT_SUFFIX + SchemaFields.INDEXED;
     }
 
     LOGGER.debug(
@@ -784,7 +834,7 @@ public class DynamicSchemaResolver {
         propertyName,
         propertyName,
         fieldSuffix);
-    return propertyName + fieldSuffix;
+    return propertyName + fieldSuffix + SchemaFields.INDEXED;
   }
 
   /**
@@ -875,8 +925,8 @@ public class DynamicSchemaResolver {
   }
 
   public String getSortKey(String field) {
-    if (field.endsWith(SchemaFields.GEO_SUFFIX)) {
-      field = field + SchemaFields.SORT_SUFFIX;
+    if (field.contains(SchemaFields.GEO_SUFFIX)) {
+      field = field.replace(SchemaFields.INDEXED, "") + SchemaFields.SORT_SUFFIX;
     }
     return field;
   }

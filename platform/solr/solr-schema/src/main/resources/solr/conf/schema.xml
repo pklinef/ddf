@@ -39,35 +39,55 @@
     <field name="_text_" type="text" indexed="true" stored="false" multiValued="true"/>
 
     <field name="id_txt" type="string" indexed="true" stored="true" required="true" multiValued="false" docValues="true"/>
-    <field name="id_txt_tokenized" type="text" indexed="true" stored="false" required="false"/>
-    <field name="id_txt_tokenized_has_case" type="text_case" indexed="true" stored="false" required="false"/>
+    <field name="id_txt_index" type="string" indexed="true" stored="false" multiValued="false" docValues="true" required="false"/>
+    <field name="id_txt_index_tokenized" type="text" indexed="true" stored="false" multiValued="false" required="false"/>
+    <field name="id_txt_index_tokenized_has_case" type="text_case" indexed="true" multiValued="false" stored="false" required="false"/>
 
     <field name="lux_xml" type="binary" indexed="false" stored="true"/>
 
-    <!-- Dynamic Fields -->
-    <dynamicField name="*_int" type="pint" indexed="true" stored="true" multiValued="true" docValues="true"/>
-    <dynamicField name="*_lng" type="plong" indexed="true" stored="true" multiValued="true" docValues="true"/>
-    <dynamicField name="*_shr" type="pint" indexed="true" stored="true" multiValued="true" docValues="true"/>
-    <dynamicField name="*_flt" type="pfloat" indexed="true" stored="true" multiValued="true" docValues="true"/>
-    <dynamicField name="*_dbl" type="pdouble" indexed="true" stored="true" multiValued="true" docValues="true"/>
-    <dynamicField name="*_tdt" type="pdate" indexed="true" stored="true" multiValued="true" docValues="true"/>
-    <dynamicField name="*_bln" type="boolean" indexed="true" stored="true" multiValued="true" docValues="true"/>
-
+    <!-- Stored Fields -->
+    <dynamicField name="*_int" type="pint" indexed="false" stored="true" multiValued="true" docValues="false"/>
+    <dynamicField name="*_lng" type="plong" indexed="false" stored="true" multiValued="true" docValues="false"/>
+    <dynamicField name="*_shr" type="pint" indexed="false" stored="true" multiValued="true" docValues="false"/>
+    <dynamicField name="*_flt" type="pfloat" indexed="false" stored="true" multiValued="true" docValues="false"/>
+    <dynamicField name="*_dbl" type="pdouble" indexed="false" stored="true" multiValued="true" docValues="false"/>
+    <dynamicField name="*_tdt" type="pdate" indexed="false" stored="true" multiValued="true" docValues="false"/>
+    <dynamicField name="*_bln" type="boolean" indexed="false" stored="true" multiValued="true" docValues="false"/>
     <dynamicField name="*_geo" type="string" indexed="false" stored="true" multiValued="true" docValues="false"/>
+    <dynamicField name="*_xml" type="string" indexed="false" stored="true" multiValued="true" docValues="false"/>
+    <dynamicField name="*_txt" type="string" indexed="false" stored="true" multiValued="true" docValues="false"/>
+    <dynamicField name="*_bin" type="binary" indexed="false" stored="true" multiValued="true" docValues="false"/>
+    <dynamicField name="*_obj" type="binary" indexed="false" stored="true" multiValued="true" docValues="false"/>
+    
+    <!-- Dynamic Fields -->
+    <dynamicField name="*_int_index" type="pint" indexed="true" stored="false" multiValued="true" docValues="true"/>
+    <dynamicField name="*_lng_index" type="plong" indexed="true" stored="false" multiValued="true" docValues="true"/>
+    <dynamicField name="*_shr_index" type="pint" indexed="true" stored="false" multiValued="true" docValues="true"/>
+    <dynamicField name="*_flt_index" type="pfloat" indexed="true" stored="false" multiValued="true" docValues="true"/>
+    <dynamicField name="*_dbl_index" type="pdouble" indexed="true" stored="false" multiValued="true" docValues="true"/>
+    <dynamicField name="*_tdt_index" type="pdate" indexed="true" stored="false" multiValued="true" docValues="true"/>
+    <dynamicField name="*_bln_index" type="boolean" indexed="true" stored="false" multiValued="true" docValues="true"/>
     <dynamicField name="*_geo_index" type="srptgeom" indexed="true" stored="false" multiValued="true"/>
     <dynamicField name="*_geo_sort" type="location" indexed="false" stored="false" multiValued="true" docValues="true"/>
-
-    <dynamicField name="*_xml" type="string" indexed="false" stored="true" multiValued="true" docValues="false"/>
-    <dynamicField name="*_txt" type="string" indexed="true" stored="true" multiValued="true" docValues="true"/>
-    <dynamicField name="*_txt_tokenized" type="text" indexed="true" stored="false" multiValued="true"/>
-    <dynamicField name="*_txt_tokenized_has_case" type="text_case" indexed="true" stored="false" multiValued="true"/>
-
-    <dynamicField name="*_bin" type="binary" indexed="false" stored="true" multiValued="true"/>
-    <dynamicField name="*_obj" type="binary" indexed="false" stored="true" multiValued="true"/>
+    <dynamicField name="*_xml_index" type="string" indexed="false" stored="false" multiValued="true" docValues="false"/>
+    <dynamicField name="*_txt_index" type="string" indexed="true" stored="false" multiValued="true" docValues="true"/>
+    <dynamicField name="*_txt_index_tokenized" type="text" indexed="true" stored="false" multiValued="true"/>
+    <dynamicField name="*_txt_index_tokenized_has_case" type="text_case" indexed="true" stored="false" multiValued="true"/>
+    <dynamicField name="*_txt_index_phonetics" type="text_phonetics" docValues="false" multiValued="true" indexed="true" stored="false"/>
 
     <!-- Copy Fields -->
-    <copyField source="*_txt_tokenized" dest="*_txt_tokenized_has_case"/>
+    <copyField source="*_int" dest="*_int_index"/>
+    <copyField source="*_lng" dest="*_lng_index"/>
+    <copyField source="*_shr" dest="*_shr_index"/>
+    <copyField source="*_flt" dest="*_flt_index"/>
+    <copyField source="*_dbl" dest="*_dbl_index"/>
+    <copyField source="*_tdt" dest="*_tdt_index"/>
+    <copyField source="*_bln" dest="*_bln_index"/>
     <copyField source="*_geo" dest="*_geo_index"/>
+    <copyField source="*_xml" dest="*_xml_index"/>
+    <copyField source="*_txt" dest="*_txt_index"/>
+    <copyField source="*_txt_index_tokenized" dest="*_txt_index_tokenized_has_case"/>
+    <copyField source="*_txt" dest="*_txt_index_phonetics"/>
 
     <!-- Field Types -->
     <fieldType name="string" class="solr.StrField" sortMissingLast="true" />
@@ -146,7 +166,5 @@
             <filter class="solr.BeiderMorseFilterFactory" nameType="GENERIC" ruleType="APPROX" concat="true" languageSet="auto"/>
         </analyzer>
     </fieldType>
-    <dynamicField name="*_txt_phonetics" type="text_phonetics" docValues="false" multiValued="true" indexed="true" stored="false"/>
-    <copyField source="*_txt" dest="*_txt_phonetics"/>
 
 </schema>

@@ -448,7 +448,7 @@ public class SolrCatalogProvider extends MaskableImpl implements CatalogProvider
       List<? extends Serializable> identifiers,
       String attributeName)
       throws IngestException {
-    String fieldName = attributeName + SchemaFields.TEXT_SUFFIX;
+    String fieldName = attributeName + SchemaFields.TEXT_SUFFIX + SchemaFields.INDEXED;
     List<Metacard> metacards = getMetacards(identifiers, fieldName);
     deletedMetacards.addAll(metacards);
 
@@ -465,7 +465,7 @@ public class SolrCatalogProvider extends MaskableImpl implements CatalogProvider
 
   private List<Metacard> getMetacards(
       List<? extends Serializable> identifierPaged, String fieldName) throws IngestException {
-    if (fieldName.equals(Metacard.ID + SchemaFields.TEXT_SUFFIX)) {
+    if (fieldName.startsWith(Metacard.ID + SchemaFields.TEXT_SUFFIX)) {
       Set<String> ids =
           identifierPaged
               .stream()

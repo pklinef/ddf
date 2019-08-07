@@ -190,12 +190,13 @@ public class SolrFilterDelegateTest {
   public void reservedSpecialCharactersIsLike() {
     // given a tokenized text property
     stub(mockResolver.getField(
-            "testProperty", AttributeFormat.STRING, true, Collections.emptyMap()))
-        .toReturn("testProperty_txt");
+            "testProperty", AttributeFormat.STRING, false, Collections.emptyMap()))
+        .toReturn("testProperty_txt_index_tokenized");
     stub(mockResolver.getSpecialIndexSuffix(AttributeFormat.STRING, Collections.emptyMap()))
         .toReturn(SchemaFields.TOKENIZED);
-    stub(mockResolver.getCaseSensitiveField("testProperty_txt_tokenized", Collections.emptyMap()))
-        .toReturn("testProperty_txt_tokenized_tokenized");
+    stub(mockResolver.getCaseSensitiveField(
+            "testProperty_txt_index_tokenized", Collections.emptyMap()))
+        .toReturn("testProperty_txt_index_tokenized_has_case");
 
     // when searching for like reserved characters
     SolrQuery likeQuery =
@@ -205,7 +206,7 @@ public class SolrFilterDelegateTest {
     assertThat(
         likeQuery.getQuery(),
         is(
-            "(testProperty_txt_tokenized_tokenized:(\\+ \\- \\&& \\|| \\! \\( \\) \\{ \\} \\[ \\] \\^ \\\" \\~ \\: \\*?))"));
+            "(testProperty_txt_index_tokenized_has_case:(\\+ \\- \\&& \\|| \\! \\( \\) \\{ \\} \\[ \\] \\^ \\\" \\~ \\: \\*?))"));
   }
 
   /*
@@ -692,12 +693,12 @@ public class SolrFilterDelegateTest {
 
   @Test
   public void testPropertyIsInProximityTo() {
-    stub(mockResolver.getField("title", AttributeFormat.STRING, true, Collections.emptyMap()))
-        .toReturn("title_txt");
+    stub(mockResolver.getField("title", AttributeFormat.STRING, false, Collections.emptyMap()))
+        .toReturn("title_txt_index_tokenized");
     stub(mockResolver.getSpecialIndexSuffix(AttributeFormat.STRING, Collections.emptyMap()))
         .toReturn(SchemaFields.TOKENIZED);
 
-    String expectedQuery = "(title_txt_tokenized:\"a proximity string\" ~2)";
+    String expectedQuery = "(title_txt_index_tokenized:\"a proximity string\" ~2)";
     SolrQuery solrQuery = toTest.propertyIsInProximityTo(Core.TITLE, 2, "a proximity string");
 
     assertThat(solrQuery.getQuery(), is(expectedQuery));

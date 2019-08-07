@@ -55,7 +55,7 @@ import org.mockito.Matchers;
 
 public class DynamicSchemaResolverTest {
 
-  private static final int INITIAL_FIELDS_CACHE_COUNT = 8;
+  private static final int INITIAL_FIELDS_CACHE_COUNT = 40;
 
   private static final ObjectMapper METACARD_TYPE_MAPPER =
       MetacardTypeMapperFactory.newObjectMapper();
@@ -283,25 +283,25 @@ public class DynamicSchemaResolverTest {
     assertThat(
         new DynamicSchemaResolver()
             .getField("unknown", AttributeFormat.XML, false, Collections.EMPTY_MAP),
-        is("unknown_xml_tpt"));
+        is("unknown_xml_index_tpt"));
 
     assertThat(
         new DynamicSchemaResolver()
             .getField("unknown", AttributeFormat.STRING, false, Collections.EMPTY_MAP),
-        is("unknown_txt_tokenized"));
+        is("unknown_txt_index_tokenized"));
 
     Map<String, Serializable> enabledFeatures = new HashMap<String, Serializable>();
     enabledFeatures.put(DynamicSchemaResolver.PHONETICS_FEATURE, Boolean.TRUE);
     assertThat(
         new DynamicSchemaResolver()
             .getField("unknown", AttributeFormat.STRING, false, enabledFeatures),
-        is("unknown_txt_phonetics"));
+        is("unknown_txt_index_phonetics"));
 
     enabledFeatures.put(DynamicSchemaResolver.PHONETICS_FEATURE, Boolean.FALSE);
     assertThat(
         new DynamicSchemaResolver()
             .getField("unknown", AttributeFormat.STRING, false, enabledFeatures),
-        is("unknown_txt_tokenized"));
+        is("unknown_txt_index_tokenized"));
   }
 
   @Test
@@ -309,23 +309,23 @@ public class DynamicSchemaResolverTest {
     assertThat(
         new DynamicSchemaResolver()
             .getField("unknown", AttributeFormat.DOUBLE, true, Collections.EMPTY_MAP),
-        is("unknown_dbl"));
+        is("unknown_dbl_index"));
     assertThat(
         new DynamicSchemaResolver()
             .getField("unknown", AttributeFormat.LONG, true, Collections.EMPTY_MAP),
-        is("unknown_lng"));
+        is("unknown_lng_index"));
     assertThat(
         new DynamicSchemaResolver()
             .getField("unknown", AttributeFormat.INTEGER, true, Collections.EMPTY_MAP),
-        is("unknown_int"));
+        is("unknown_int_index"));
     assertThat(
         new DynamicSchemaResolver()
             .getField("unknown", AttributeFormat.SHORT, true, Collections.EMPTY_MAP),
-        is("unknown_shr"));
+        is("unknown_shr_index"));
     assertThat(
         new DynamicSchemaResolver()
             .getField("unknown", AttributeFormat.FLOAT, true, Collections.EMPTY_MAP),
-        is("unknown_flt"));
+        is("unknown_flt_index"));
     assertThat(
         new DynamicSchemaResolver()
             .getField("anyGeo", AttributeFormat.BINARY, true, Collections.EMPTY_MAP),
@@ -333,13 +333,13 @@ public class DynamicSchemaResolverTest {
     assertThat(
         new DynamicSchemaResolver()
             .getField("unknown", AttributeFormat.STRING, true, Collections.EMPTY_MAP),
-        is("unknown_txt"));
+        is("unknown_txt_index"));
 
     Map<String, Serializable> enabledFeatures = new HashMap<String, Serializable>();
     enabledFeatures.put(DynamicSchemaResolver.PHONETICS_FEATURE, Boolean.TRUE);
     assertThat(
         new DynamicSchemaResolver()
             .getField("unknown", AttributeFormat.STRING, true, enabledFeatures),
-        is("unknown_txt"));
+        is("unknown_txt_index"));
   }
 }

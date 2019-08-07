@@ -363,7 +363,7 @@ public class SolrMetacardClientImpl implements SolrMetacardClient {
             });
 
     return new FacetAttributeResultImpl(
-        resolver.resolveFieldName(facetField.getName()), values, counts);
+        resolver.resolveAttribute(facetField.getName()), values, counts);
   }
 
   @Override
@@ -605,7 +605,11 @@ public class SolrMetacardClientImpl implements SolrMetacardClient {
             .fieldsCache
             .stream()
             .filter(Objects::nonNull)
-            .filter(field -> excludedAttributes.stream().anyMatch(field::startsWith))
+            .filter(
+                field ->
+                    excludedAttributes.stream().anyMatch(field::startsWith)
+                        && field.endsWith(SchemaFields.INDEXED))
+            .map(resolver::resolveFieldName)
             .collect(Collectors.toSet());
 
     Set<String> wildcardFields =
@@ -627,8 +631,14 @@ public class SolrMetacardClientImpl implements SolrMetacardClient {
                         .fieldsCache
                         .stream()
                         .filter(Objects::nonNull)
-                        .filter(field -> field.endsWith(suffix))
+                        .filter(
+                            field ->
+                                field.endsWith(suffix)
+                                    || field.endsWith(suffix + SchemaFields.INDEXED))
                         .filter(field -> excludedAttributes.stream().noneMatch(field::startsWith)))
+            .map(
+                field ->
+                    field.endsWith(SchemaFields.INDEXED) ? resolver.resolveFieldName(field) : field)
             .collect(Collectors.toSet());
 
     Set<String> fields = Sets.union(includedFields, wildcardFields);
@@ -725,8 +735,12 @@ public class SolrMetacardClientImpl implements SolrMetacardClient {
 
         if (!resolvedProperties.isEmpty()) {
           for (String sortField : resolvedProperties) {
-            if (sortField.endsWith(SchemaFields.GEO_SUFFIX)) {
-              addDistanceSort(query, resolver.getSortKey(sortField), order, solrFilterDelegate);
+            if (sortField.endsWith(SchemaFields.GEO_SUFFIX + SchemaFields.INDEXED)) {
+              addDistanceSort(
+                  query,
+                  resolver.getSortKey(resolver.resolveFieldName(sortField)),
+                  order,
+                  solrFilterDelegate);
             } else if (!(sortField.endsWith(SchemaFields.BINARY_SUFFIX)
                 || sortField.endsWith(SchemaFields.OBJECT_SUFFIX))) {
               query.addSort(resolver.getSortKey(sortField), order);

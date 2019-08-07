@@ -792,7 +792,9 @@ public class SolrProviderQuery {
     properties.put(
         SolrMetacardClientImpl.EXCLUDE_ATTRIBUTES,
         com.google.common.collect.Sets.newHashSet(Metacard.TITLE));
+
     SourceResponse sourceResponse = provider.query(new QueryRequestImpl(query, properties));
+
     assertEquals(1, sourceResponse.getResults().size());
     assertThat(sourceResponse.getResults().get(0).getMetacard().getTitle(), is(nullValue()));
   }
