@@ -35,6 +35,8 @@ public class SolrFilterDelegateTest {
   private static final String TOKENIZED_METADATA_FIELD =
       Metacard.METADATA + SchemaFields.TEXT_SUFFIX + SchemaFields.TOKENIZED;
 
+  private static final String METADATA_FIELD = Metacard.METADATA + SchemaFields.TEXT_SUFFIX;
+
   private DynamicSchemaResolver mockResolver = mock(DynamicSchemaResolver.class);
 
   private SolrFilterDelegate toTest = new SolrFilterDelegate(mockResolver, Collections.emptyMap());
@@ -192,6 +194,9 @@ public class SolrFilterDelegateTest {
     stub(mockResolver.getField(
             "testProperty", AttributeFormat.STRING, false, Collections.emptyMap()))
         .toReturn("testProperty_txt_index_tokenized");
+    stub(mockResolver.getField(
+            "testProperty", AttributeFormat.STRING, true, Collections.emptyMap()))
+        .toReturn("testProperty_txt_index");
     stub(mockResolver.getSpecialIndexSuffix(AttributeFormat.STRING, Collections.emptyMap()))
         .toReturn(SchemaFields.TOKENIZED);
     stub(mockResolver.getCaseSensitiveField(
@@ -206,7 +211,8 @@ public class SolrFilterDelegateTest {
     assertThat(
         likeQuery.getQuery(),
         is(
-            "(testProperty_txt_index_tokenized_has_case:(\\+ \\- \\&& \\|| \\! \\( \\) \\{ \\} \\[ \\] \\^ \\\" \\~ \\: \\*?))"));
+            "(testProperty_txt_index_tokenized_has_case:(\\+ \\- \\&& \\|| \\! \\( \\) \\{ \\} \\[ \\] \\^ \\\" \\~ \\: \\*?) or "
+                + "testProperty_txt_index:(\\+ \\- \\&& \\|| \\! \\( \\) \\{ \\} \\[ \\] \\^ \\\" \\~ \\: \\*?))"));
   }
 
   /*
@@ -410,7 +416,8 @@ public class SolrFilterDelegateTest {
         .toReturn(SchemaFields.TOKENIZED);
 
     String searchPhrase = "abc-123*";
-    String expectedQuery = "(" + TOKENIZED_METADATA_FIELD + ":(abc\\-123*))";
+    String expectedQuery =
+        "(" + TOKENIZED_METADATA_FIELD + ":(abc\\-123*) " + METADATA_FIELD + ":(abc\\-123*))";
     boolean isCaseSensitive = false;
 
     SolrQuery isLikeQuery = toTest.propertyIsLike(Metacard.ANY_TEXT, searchPhrase, isCaseSensitive);
@@ -450,7 +457,8 @@ public class SolrFilterDelegateTest {
         .toReturn(SchemaFields.TOKENIZED);
 
     String searchPhrase = "title*";
-    String expectedQuery = "(" + TOKENIZED_METADATA_FIELD + ":(title*))";
+    String expectedQuery =
+        "(" + TOKENIZED_METADATA_FIELD + ":(title*) " + METADATA_FIELD + ":(title*))";
     boolean isCaseSensitive = false;
 
     SolrQuery isLikeQuery = toTest.propertyIsLike(Metacard.ANY_TEXT, searchPhrase, isCaseSensitive);
@@ -465,7 +473,8 @@ public class SolrFilterDelegateTest {
         .toReturn(SchemaFields.TOKENIZED);
 
     String searchPhrase = "abc 123*";
-    String expectedQuery = "(" + TOKENIZED_METADATA_FIELD + ":(abc 123*))";
+    String expectedQuery =
+        "(" + TOKENIZED_METADATA_FIELD + ":(abc 123*) " + METADATA_FIELD + ":(abc 123*))";
 
     SolrQuery isLikeQuery = toTest.propertyIsLike(Metacard.ANY_TEXT, searchPhrase, false);
 
@@ -482,7 +491,12 @@ public class SolrFilterDelegateTest {
 
     String searchPhrase = "abc-123*";
     String expectedQuery =
-        "(" + TOKENIZED_METADATA_FIELD + SchemaFields.HAS_CASE + ":(abc\\-123*))";
+        "("
+            + TOKENIZED_METADATA_FIELD
+            + SchemaFields.HAS_CASE
+            + ":(abc\\-123*) "
+            + METADATA_FIELD
+            + ":(abc\\-123*))";
 
     SolrQuery isLikeQuery = toTest.propertyIsLike(Metacard.ANY_TEXT, searchPhrase, true);
 
@@ -695,10 +709,13 @@ public class SolrFilterDelegateTest {
   public void testPropertyIsInProximityTo() {
     stub(mockResolver.getField("title", AttributeFormat.STRING, false, Collections.emptyMap()))
         .toReturn("title_txt_index_tokenized");
+    stub(mockResolver.getField("title", AttributeFormat.STRING, true, Collections.emptyMap()))
+        .toReturn("title_txt_index");
     stub(mockResolver.getSpecialIndexSuffix(AttributeFormat.STRING, Collections.emptyMap()))
         .toReturn(SchemaFields.TOKENIZED);
 
-    String expectedQuery = "(title_txt_index_tokenized:\"a proximity string\" ~2)";
+    String expectedQuery =
+        "(title_txt_index_tokenized:\"a proximity string\" ~2 or title_txt_index:\"a proximity string\" ~2)";
     SolrQuery solrQuery = toTest.propertyIsInProximityTo(Core.TITLE, 2, "a proximity string");
 
     assertThat(solrQuery.getQuery(), is(expectedQuery));

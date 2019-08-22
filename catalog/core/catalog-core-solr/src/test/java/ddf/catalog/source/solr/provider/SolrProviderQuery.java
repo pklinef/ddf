@@ -80,6 +80,7 @@ import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mockito.internal.util.collections.Sets;
 import org.opengis.filter.Filter;
 import org.opengis.filter.FilterFactory;
 import org.opengis.filter.sort.SortOrder;
@@ -764,6 +765,67 @@ public class SolrProviderQuery {
 
     queryAndVerifyCount(
         1, getFilterBuilder().attribute(Metacard.ANY_TEXT).is().like().text(soughtWord), provider);
+  }
+
+  @Test
+  public void testMetacardTagQuery() throws Exception {
+
+    deleteAll(provider);
+
+    List<Metacard> list = new ArrayList<>();
+
+    MockMetacard metacard1 = new MockMetacard(Library.getFlagstaffRecord());
+    String soughtWord = "foo";
+    metacard1.setTags(Sets.newSet(soughtWord));
+
+    list.add(metacard1);
+
+    MockMetacard metacard2 = new MockMetacard(Library.getTampaRecord());
+
+    list.add(metacard2);
+
+    MockMetacard metacard3 = new MockMetacard(Library.getShowLowRecord());
+
+    list.add(metacard3);
+
+    create(list, provider);
+
+    queryAndVerifyCount(
+        1, getFilterBuilder().attribute(Metacard.TAGS).is().like().text(soughtWord), provider);
+  }
+
+  @Test
+  public void testGetRealTimeId() throws Exception {
+
+    deleteAll(provider);
+
+    List<Metacard> list = new ArrayList<>();
+
+    MockMetacard metacard1 = new MockMetacard(Library.getFlagstaffRecord());
+    String id = "123";
+    metacard1.setId(id);
+    String soughtWord = "workspace";
+    metacard1.setTags(Sets.newSet(soughtWord));
+
+    list.add(metacard1);
+
+    MockMetacard metacard2 = new MockMetacard(Library.getTampaRecord());
+
+    list.add(metacard2);
+
+    MockMetacard metacard3 = new MockMetacard(Library.getShowLowRecord());
+
+    list.add(metacard3);
+
+    create(list, provider);
+
+    Filter idFilter =
+        getFilterBuilder()
+            .allOf(
+                getFilterBuilder().attribute(Metacard.TAGS).is().like().text(soughtWord),
+                getFilterBuilder().attribute(Metacard.ID).is().equalTo().text(id));
+
+    queryAndVerifyCount(1, idFilter, provider);
   }
 
   @Test

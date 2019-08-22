@@ -58,42 +58,42 @@ public class SolrQueryFilterVisitorTest {
   public void testEqualTo() throws Exception {
     Filter filter = ECQL.toFilter("property = 'test'");
     SolrQuery solrQuery = (SolrQuery) filter.accept(solrVisitor, null);
-    assertThat(solrQuery.getQuery(), equalTo("property_txt:\"test\""));
+    assertThat(solrQuery.getQuery(), equalTo("property_txt_index:\"test\""));
   }
 
   @Test
   public void testEqualToID() throws Exception {
     Filter filter = ECQL.toFilter("'id' = 'test'");
     SolrQuery solrQuery = (SolrQuery) filter.accept(solrVisitor, null);
-    assertThat(solrQuery.getQuery(), equalTo("id_txt:\"test\""));
+    assertThat(solrQuery.getQuery(), equalTo("id_txt_index:\"test\""));
   }
 
   @Test
   public void testGreaterThan() throws Exception {
     Filter filter = ECQL.toFilter("property > 9");
     SolrQuery solrQuery = (SolrQuery) filter.accept(solrVisitor, null);
-    assertThat(solrQuery.getQuery().trim(), equalTo("property_txt:{ 9 TO * ]"));
+    assertThat(solrQuery.getQuery().trim(), equalTo("property_txt_index:{ 9 TO * ]"));
   }
 
   @Test
   public void testGreaterThanOrEqualTo() throws Exception {
     Filter filter = ECQL.toFilter("property >= 9");
     SolrQuery solrQuery = (SolrQuery) filter.accept(solrVisitor, null);
-    assertThat(solrQuery.getQuery().trim(), equalTo("property_txt:[ 9 TO * ]"));
+    assertThat(solrQuery.getQuery().trim(), equalTo("property_txt_index:[ 9 TO * ]"));
   }
 
   @Test
   public void testLessThan() throws Exception {
     Filter filter = ECQL.toFilter("property < 9");
     SolrQuery solrQuery = (SolrQuery) filter.accept(solrVisitor, null);
-    assertThat(solrQuery.getQuery().trim(), equalTo("property_txt:[ * TO 9 }"));
+    assertThat(solrQuery.getQuery().trim(), equalTo("property_txt_index:[ * TO 9 }"));
   }
 
   @Test
   public void testLessThanOrEqualTo() throws Exception {
     Filter filter = ECQL.toFilter("property <= 9");
     SolrQuery solrQuery = (SolrQuery) filter.accept(solrVisitor, null);
-    assertThat(solrQuery.getQuery().trim(), equalTo("property_txt:[ * TO 9 ]"));
+    assertThat(solrQuery.getQuery().trim(), equalTo("property_txt_index:[ * TO 9 ]"));
   }
 
   @Test
@@ -102,7 +102,7 @@ public class SolrQueryFilterVisitorTest {
     SolrQuery solrQuery = (SolrQuery) filter.accept(solrVisitor, null);
     assertThat(
         solrQuery.getQuery().trim(),
-        equalTo("( property_txt:\"val\" AND otherProp_txt:\"val2\" )"));
+        equalTo("( property_txt_index:\"val\" AND otherProp_txt_index:\"val2\" )"));
   }
 
   @Test
@@ -110,7 +110,8 @@ public class SolrQueryFilterVisitorTest {
     Filter filter = ECQL.toFilter("property = 'val' OR otherProp = 'val2'");
     SolrQuery solrQuery = (SolrQuery) filter.accept(solrVisitor, null);
     assertThat(
-        solrQuery.getQuery().trim(), equalTo("( property_txt:\"val\" OR otherProp_txt:\"val2\" )"));
+        solrQuery.getQuery().trim(),
+        equalTo("( property_txt_index:\"val\" OR otherProp_txt_index:\"val2\" )"));
   }
 
   @Test(expected = UnsupportedOperationException.class)
@@ -131,7 +132,7 @@ public class SolrQueryFilterVisitorTest {
     // this is effectively an or with a single param which is allowed
     Filter filter = ECQL.toFilter("property IN ('val')");
     SolrQuery solrQuery = (SolrQuery) filter.accept(solrVisitor, null);
-    assertThat(solrQuery.getQuery().trim(), equalTo("( property_txt:\"val\" )"));
+    assertThat(solrQuery.getQuery().trim(), equalTo("( property_txt_index:\"val\" )"));
   }
 
   @Test
@@ -167,7 +168,7 @@ public class SolrQueryFilterVisitorTest {
     solrVisitor = new SolrQueryFilterVisitor("alerts", mockResolver);
 
     String propertyName = solrVisitor.getMappedPropertyName("testField2");
-    assertThat(propertyName, is("testField2_txt"));
+    assertThat(propertyName, is("testField2_txt_index"));
 
     // simulates an entry in SOLR to query schema for "testField"
     SchemaField schema = new SchemaField("testField2_int", "tint");

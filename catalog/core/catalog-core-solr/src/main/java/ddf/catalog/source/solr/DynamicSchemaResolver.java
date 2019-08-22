@@ -308,19 +308,26 @@ public class DynamicSchemaResolver {
           AttributeFormat format = ad.getType().getAttributeFormat();
           String formatIndexName = ad.getName() + getFieldSuffix(format);
 
+          // *_txt_index_tokenized
+          String specialStringIndexName =
+              ad.getName()
+                  + getFieldSuffix(AttributeFormat.STRING)
+                  + SchemaFields.INDEXED
+                  + getSpecialIndexSuffix(AttributeFormat.STRING);
+
           if (AttributeFormat.XML.equals(format)
               && solrInputDocument.getFieldValue(
                       formatIndexName + getSpecialIndexSuffix(AttributeFormat.STRING))
                   == null) {
-            List<String> parsedTexts = parseTextFrom(attributeValues);
+            if (ad.isTokenized()) {
+              List<String> parsedTexts = parseTextFrom(attributeValues);
 
-            // parsedTexts => *_txt_index_tokenized
-            String specialStringIndexName =
-                ad.getName()
-                    + getFieldSuffix(AttributeFormat.STRING)
-                    + SchemaFields.INDEXED
-                    + getSpecialIndexSuffix(AttributeFormat.STRING);
-            solrInputDocument.addField(specialStringIndexName, parsedTexts);
+              // parsedTexts => *_txt_index_tokenized
+              solrInputDocument.addField(specialStringIndexName, parsedTexts);
+              // *_txt_index_tokenized_has_case
+              solrInputDocument.addField(
+                  specialStringIndexName + SchemaFields.HAS_CASE, parsedTexts);
+            }
           } else if (AttributeFormat.STRING.equals(format)
               && solrInputDocument.getFieldValue(
                       ad.getName() + getFieldSuffix(AttributeFormat.STRING))
@@ -338,13 +345,21 @@ public class DynamicSchemaResolver {
             solrInputDocument.addField(
                 ad.getName() + getFieldSuffix(AttributeFormat.STRING), truncatedValues);
 
-            // *_txt_index_tokenized
-            solrInputDocument.addField(
-                ad.getName()
-                    + getFieldSuffix(AttributeFormat.STRING)
-                    + SchemaFields.INDEXED
-                    + getSpecialIndexSuffix(AttributeFormat.STRING),
-                attributeValues);
+            if (ad.isIndexed()) {
+              // *_txt_index
+              solrInputDocument.addField(
+                  ad.getName() + getFieldSuffix(AttributeFormat.STRING) + SchemaFields.INDEXED,
+                  attributeValues);
+            }
+
+            if (ad.isTokenized()) {
+              // *_txt_index_tokenized
+              solrInputDocument.addField(specialStringIndexName, attributeValues);
+
+              // *_txt_index_tokenized_has_case
+              solrInputDocument.addField(
+                  specialStringIndexName + SchemaFields.HAS_CASE, attributeValues);
+            }
           } else if (AttributeFormat.OBJECT.equals(format)) {
             ByteArrayOutputStream byteArrayOS = new ByteArrayOutputStream();
             List<Serializable> byteArrays = new ArrayList<>();
@@ -372,6 +387,13 @@ public class DynamicSchemaResolver {
           // Prevent adding a field already on document
           if (solrInputDocument.getFieldValue(formatIndexName) == null) {
             solrInputDocument.addField(formatIndexName, attributeValues);
+
+            if (ad.isIndexed()
+                && solrInputDocument.getFieldValue(formatIndexName + SchemaFields.INDEXED) == null
+                && !(AttributeFormat.BINARY.equals(format)
+                    || AttributeFormat.OBJECT.equals(format))) {
+              solrInputDocument.addField(formatIndexName + SchemaFields.INDEXED, attributeValues);
+            }
           } else {
             LOGGER.trace("Skipping adding field already found on document ({})", formatIndexName);
           }

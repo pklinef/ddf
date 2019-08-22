@@ -76,17 +76,6 @@
     <dynamicField name="*_txt_index_phonetics" type="text_phonetics" docValues="false" multiValued="true" indexed="true" stored="false"/>
 
     <!-- Copy Fields -->
-    <copyField source="*_int" dest="*_int_index"/>
-    <copyField source="*_lng" dest="*_lng_index"/>
-    <copyField source="*_shr" dest="*_shr_index"/>
-    <copyField source="*_flt" dest="*_flt_index"/>
-    <copyField source="*_dbl" dest="*_dbl_index"/>
-    <copyField source="*_tdt" dest="*_tdt_index"/>
-    <copyField source="*_bln" dest="*_bln_index"/>
-    <copyField source="*_geo" dest="*_geo_index"/>
-    <copyField source="*_xml" dest="*_xml_index"/>
-    <copyField source="*_txt" dest="*_txt_index"/>
-    <copyField source="*_txt_index_tokenized" dest="*_txt_index_tokenized_has_case"/>
     <copyField source="*_txt" dest="*_txt_index_phonetics"/>
 
     <!-- Field Types -->

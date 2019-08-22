@@ -34,6 +34,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
@@ -322,7 +323,17 @@ public class SolrFilterDelegate extends FilterDelegate<SolrQuery> {
         mappedPropertyName = resolver.getCaseSensitiveField(mappedPropertyName, enabledFeatures);
       }
 
-      return new SolrQuery(mappedPropertyName + ":" + searchPhrase);
+      String exactField = getMappedPropertyName(propertyName, AttributeFormat.STRING, true);
+      return new SolrQuery(
+          "("
+              + mappedPropertyName
+              + ":"
+              + searchPhrase
+              + " OR "
+              + exactField
+              + ":"
+              + searchPhrase
+              + ")");
     }
   }
 
@@ -368,14 +379,15 @@ public class SolrFilterDelegate extends FilterDelegate<SolrQuery> {
               .map(
                   field -> {
                     if (!isExact) {
-                      return field + tokenized;
+                      return Arrays.asList(field + tokenized, field);
                     } else {
-                      return field;
+                      return Arrays.asList(field);
                     }
                   })
+              .flatMap(Collection::stream)
               .map(
                   textField -> {
-                    if (isCaseSensitive && !isExact) {
+                    if (isCaseSensitive && !isExact && textField.contains(tokenized)) {
                       return resolver.getCaseSensitiveField(textField, enabledFeatures);
                     } else {
                       return textField;
@@ -384,11 +396,16 @@ public class SolrFilterDelegate extends FilterDelegate<SolrQuery> {
               .map(field -> field + ":" + searchPhrase)
               .collect(Collectors.joining(" "));
     } else {
-      String field = getMappedPropertyName(propertyName, AttributeFormat.STRING, false);
-      if (isCaseSensitive) {
+      String field = getMappedPropertyName(propertyName, AttributeFormat.STRING, isExact);
+      if (isCaseSensitive && !isExact) {
         field = resolver.getCaseSensitiveField(field, enabledFeatures);
       }
       solrQuery = field + ":" + searchPhrase;
+      // if not exact, search on the tokenized and non-tokenized fields
+      if (!isExact) {
+        String exactField = getMappedPropertyName(propertyName, AttributeFormat.STRING, true);
+        solrQuery += " OR " + exactField + ":" + searchPhrase;
+      }
     }
     return "(" + solrQuery + ")";
   }

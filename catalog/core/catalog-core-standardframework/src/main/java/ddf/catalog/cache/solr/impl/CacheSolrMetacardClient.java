@@ -18,6 +18,7 @@ import ddf.catalog.data.MetacardCreationException;
 import ddf.catalog.data.impl.MetacardImpl;
 import ddf.catalog.filter.FilterAdapter;
 import ddf.catalog.source.solr.DynamicSchemaResolver;
+import ddf.catalog.source.solr.SchemaFields;
 import ddf.catalog.source.solr.SolrFilterDelegateFactory;
 import ddf.catalog.source.solr.SolrMetacardClientImpl;
 import java.io.IOException;
@@ -35,7 +36,11 @@ import org.codice.solr.client.solrj.SolrClient;
 class CacheSolrMetacardClient extends SolrMetacardClientImpl {
 
   private static final List<String> ADDITIONAL_FIELDS =
-      Arrays.asList(SolrCache.METACARD_SOURCE_NAME, SolrCache.METACARD_ID_NAME);
+      Arrays.asList(
+          SolrCache.METACARD_SOURCE_NAME,
+          SolrCache.METACARD_SOURCE_NAME + SchemaFields.INDEXED,
+          SolrCache.METACARD_ID_NAME,
+          SolrCache.METACARD_ID_NAME + SchemaFields.INDEXED);
 
   public CacheSolrMetacardClient(
       SolrClient client,
@@ -71,9 +76,16 @@ class CacheSolrMetacardClient extends SolrMetacardClientImpl {
 
     if (StringUtils.isNotBlank(metacard.getSourceId())) {
       solrInputDocument.addField(SolrCache.METACARD_SOURCE_NAME, metacard.getSourceId());
+      solrInputDocument.addField(
+          SolrCache.METACARD_SOURCE_NAME + SchemaFields.INDEXED, metacard.getSourceId());
       solrInputDocument.setField(
           SolrCache.METACARD_UNIQUE_ID_NAME, metacard.getSourceId() + metacard.getId());
+      solrInputDocument.setField(
+          SolrCache.METACARD_UNIQUE_ID_NAME + SchemaFields.INDEXED,
+          metacard.getSourceId() + metacard.getId());
       solrInputDocument.addField(SolrCache.METACARD_ID_NAME, metacard.getId());
+      solrInputDocument.addField(
+          SolrCache.METACARD_ID_NAME + SchemaFields.INDEXED, metacard.getId());
     }
 
     return solrInputDocument;
