@@ -209,6 +209,7 @@
         <gson.version>2.8.5</gson.version>
         <guava.version>20.0</guava.version>
         <hawtbuff.version>1.11</hawtbuff.version>
+        <hawtio.version>2.7.1</hawtio.version>
         <httpclient.version>4.5.6</httpclient.version>
         <httpcore.version>4.4.10</httpcore.version>
         <httpmime.version>${httpclient.version}</httpmime.version>

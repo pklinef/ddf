@@ -20,6 +20,10 @@
         mvn:org.apache.karaf.decanter/apache-karaf-decanter/${decanter.version}/xml/features
     </repository>
 
+    <repository>
+        mvn:io.hawt/hawtio-karaf/${hawtio.version}/xml/features
+    </repository>
+
     <repository>mvn:ddf.features/branding/${project.version}/xml/features</repository>
     <repository>mvn:ddf.features/cxf/${project.version}/xml/features</repository>
     <repository>mvn:ddf.features/security/${project.version}/xml/features</repository>
@@ -131,6 +135,7 @@
         <feature>admin-core</feature>
         <feature>ddf-branding</feature>
         <feature>branding-registry</feature>
+        <feature>hawtio</feature>
         <bundle>mvn:ddf.admin/admin-ui/${project.version}</bundle>
     </feature>
 
