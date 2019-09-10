@@ -49,7 +49,8 @@ public class CsrfFilter implements Filter {
   public static final String REFERER_HEADER = "Referer";
 
   private static final String SERVICE_CONTEXT = "/services";
-  private static final String JOLOKIA_CONTEXT = "/admin/jolokia";
+  private static final String ADMIN_JOLOKIA_CONTEXT = "/admin/jolokia";
+  private static final String HAWTIO_JOLOKIA_CONTEXT = "/hawtio/jolokia";
   private static final String INTRIGUE_CONTEXT = "/search/catalog/internal";
   private static final String WEBSOCKET_CONTEXT = "/search/catalog/ws";
   private static final String WEBSOCKET_CONTEXT_REGEX = "/search/catalog/ws.*";
@@ -78,7 +79,8 @@ public class CsrfFilter implements Filter {
     trustedAuthorities = new ArrayList<>();
     protectedContexts = new ArrayList<>();
 
-    protectedContexts.add(JOLOKIA_CONTEXT);
+    protectedContexts.add(ADMIN_JOLOKIA_CONTEXT);
+    protectedContexts.add(HAWTIO_JOLOKIA_CONTEXT);
     protectedContexts.add(INTRIGUE_CONTEXT);
     protectedContexts.add(WEBSOCKET_CONTEXT);
   }
