@@ -104,7 +104,7 @@
         <dependency>
             <groupId>ddf.lib</groupId>
             <artifactId>common-system</artifactId>
-            <version>${project.version}</version>
+            <version>${ddf.lib.version}</version>
         </dependency>
         <dependency>
             <groupId>ddf.platform.security</groupId>

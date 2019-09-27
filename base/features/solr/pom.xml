@@ -20,39 +20,40 @@
         <version>2.22.0-SNAPSHOT</version>
     </parent>
     <name>DDF :: Features :: Solr</name>
+    <groupId>ddf.features.core</groupId>
     <artifactId>solr</artifactId>
     <packaging>feature</packaging>
     <dependencies>
-        <dependency>
-            <groupId>ddf.platform.solr</groupId>
-            <artifactId>solr-appender</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ddf.persistence.core</groupId>
-            <artifactId>persistence-core-api</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ddf.persistence.core</groupId>
-            <artifactId>persistence-core-impl</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ddf.persistence.core</groupId>
-            <artifactId>persistence-core-commands</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ddf.persistence.core</groupId>
-            <artifactId>persistence-core-listeners</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ddf.persistence.core</groupId>
-            <artifactId>persistence-core-attributes-impl</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>ddf.platform.solr</groupId>-->
+<!--            <artifactId>solr-appender</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>ddf.persistence.core</groupId>-->
+<!--            <artifactId>persistence-core-api</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>ddf.persistence.core</groupId>-->
+<!--            <artifactId>persistence-core-impl</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>ddf.persistence.core</groupId>-->
+<!--            <artifactId>persistence-core-commands</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>ddf.persistence.core</groupId>-->
+<!--            <artifactId>persistence-core-listeners</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>ddf.persistence.core</groupId>-->
+<!--            <artifactId>persistence-core-attributes-impl</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.codice.thirdparty</groupId>
             <artifactId>jts</artifactId>
@@ -88,61 +89,61 @@
             <artifactId>solr-factory-impl</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>ddf.platform.solr</groupId>
-            <artifactId>solr-password</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ddf.admin.core</groupId>
-            <artifactId>admin-core-api</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>ddf.platform.solr</groupId>-->
+<!--            <artifactId>solr-password</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>ddf.admin.core</groupId>-->
+<!--            <artifactId>admin-core-api</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--        </dependency>-->
 
         <!--feature dependencies-->
-        <dependency>
-            <groupId>ddf.features</groupId>
-            <artifactId>security</artifactId>
-            <version>${project.version}</version>
-            <type>xml</type>
-            <classifier>features</classifier>
-        </dependency>
-        <dependency>
-            <groupId>ddf.features</groupId>
-            <artifactId>utilities</artifactId>
-            <version>${project.version}</version>
-            <type>xml</type>
-            <classifier>features</classifier>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>ddf.features</groupId>-->
+<!--            <artifactId>security</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--            <type>xml</type>-->
+<!--            <classifier>features</classifier>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>ddf.features</groupId>-->
+<!--            <artifactId>utilities</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--            <type>xml</type>-->
+<!--            <classifier>features</classifier>-->
+<!--        </dependency>-->
         <!--end feature dependencies-->
 
-        <dependency>
-            <groupId>ddf.platform</groupId>
-            <artifactId>sync-installer-api</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.codice.ddf</groupId>
-            <artifactId>kernel</artifactId>
-            <version>${project.version}</version>
-            <type>zip</type>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>ddf.lib</groupId>
-            <artifactId>test-common</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>ddf.features</groupId>
-            <artifactId>test-utilities</artifactId>
-            <version>${project.version}</version>
-            <type>xml</type>
-            <classifier>features</classifier>
-            <scope>test</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>ddf.platform</groupId>-->
+<!--            <artifactId>sync-installer-api</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.codice.ddf</groupId>-->
+<!--            <artifactId>kernel</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--            <type>zip</type>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>ddf.lib</groupId>-->
+<!--            <artifactId>test-common</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>ddf.features</groupId>-->
+<!--            <artifactId>test-utilities</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--            <type>xml</type>-->
+<!--            <classifier>features</classifier>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
     </dependencies>
     <build>
         <resources>
@@ -171,9 +172,9 @@
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
             </plugin>
-            <plugin>
-                <artifactId>maven-failsafe-plugin</artifactId>
-            </plugin>
+<!--            <plugin>-->
+<!--                <artifactId>maven-failsafe-plugin</artifactId>-->
+<!--            </plugin>-->
         </plugins>
     </build>
 </project>

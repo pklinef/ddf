@@ -13,21 +13,21 @@
  **/
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
   <parent>
+    <groupId>org.codice.ddf.modules.spatial</groupId>
     <artifactId>csw</artifactId>
-    <groupId>org.codice.ddf.spatial</groupId>
     <version>2.22.0-SNAPSHOT</version>
   </parent>
-  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.codice.ddf.spatial</groupId>
   <artifactId>spatial-csw-action</artifactId>
-  <name>DDF :: Spatial :: CSW :: Action</name>
   <packaging>bundle</packaging>
-
+  <name>DDF :: Spatial :: CSW :: Action</name>
   <dependencies>
     <dependency>
       <groupId>ddf.catalog.core</groupId>
       <artifactId>catalog-core-api</artifactId>
-      <version>${project.version}</version>
+      <version>${ddf.base.version}</version>
     </dependency>
     <dependency>
       <groupId>org.codice.ddf.spatial</groupId>
@@ -35,7 +35,6 @@
       <version>${project.version}</version>
     </dependency>
   </dependencies>
-
   <build>
     <plugins>
       <plugin>
@@ -44,17 +43,12 @@
         <configuration>
           <instructions>
             <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
-            <Export-Package>
-              org.codice.ddf.spatial.ogc.csw.catalog.actions
-            </Export-Package>
-            <Import-Package>
-              net.opengis.cat.csw.v_2_0_2;version="[2.8,3)",
-              *
-            </Import-Package>
+            <Export-Package>org.codice.ddf.spatial.ogc.csw.catalog.actions</Export-Package>
+            <Import-Package>net.opengis.cat.csw.v_2_0_2;version="[2.8,3)",
+              *</Import-Package>
           </instructions>
         </configuration>
       </plugin>
     </plugins>
   </build>
-
 </project>

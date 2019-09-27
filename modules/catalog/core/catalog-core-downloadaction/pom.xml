@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
  * Copyright (c) Codice Foundation
@@ -13,136 +13,128 @@
  **/
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>core</artifactId>
-        <groupId>ddf.catalog.core</groupId>
-        <version>2.22.0-SNAPSHOT</version>
-    </parent>
-    <modelVersion>4.0.0</modelVersion>
-    <artifactId>catalog-core-downloadaction</artifactId>
-    <name>DDF :: Catalog :: Core :: Download Action</name>
-    <packaging>bundle</packaging>
-    <dependencies>
-        <dependency>
-            <groupId>ddf.action.core</groupId>
-            <artifactId>action-core-impl</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>ddf.catalog.core</groupId>
-            <artifactId>catalog-core-actions</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.ws.rs</groupId>
-            <artifactId>javax.ws.rs-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>ddf.catalog.core</groupId>
-            <artifactId>catalog-core-standardframework</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.jknack</groupId>
-            <artifactId>handlebars</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.antlr</groupId>
-            <artifactId>antlr4-runtime</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>ddf.lib</groupId>
-            <artifactId>common-system</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-    </dependencies>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <configuration>
-                    <instructions>
-                        <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
-                        <Embed-Dependency>
-                            catalog-core-actions, 
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>ddf.modules.catalog.core</groupId>
+    <artifactId>core</artifactId>
+    <version>2.22.0-SNAPSHOT</version>
+  </parent>
+  <groupId>ddf.catalog.core</groupId>
+  <artifactId>catalog-core-downloadaction</artifactId>
+  <packaging>bundle</packaging>
+  <name>DDF :: Catalog :: Core :: Download Action</name>
+  <dependencies>
+    <dependency>
+      <groupId>ddf.action.core</groupId>
+      <artifactId>action-core-impl</artifactId>
+      <version>${ddf.base.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>ddf.catalog.core</groupId>
+      <artifactId>catalog-core-actions</artifactId>
+      <version>${ddf.base.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.ws.rs</groupId>
+      <artifactId>javax.ws.rs-api</artifactId>
+      <version>${javax.ws.rs.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>ddf.catalog.core</groupId>
+      <artifactId>catalog-core-standardframework</artifactId>
+      <version>${ddf.base.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.github.jknack</groupId>
+      <artifactId>handlebars</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.antlr</groupId>
+      <artifactId>antlr4-runtime</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>ddf.lib</groupId>
+      <artifactId>common-system</artifactId>
+      <version>${ddf.lib.version}</version>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <configuration>
+          <instructions>
+            <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+            <Embed-Dependency>catalog-core-actions, 
                             commons-lang3,
                             handlebars,
-                            antlr4-runtime
-                        </Embed-Dependency>
-                        <Import-Package>
-                            !org.abego.treelayout.*,
-                            *
-                        </Import-Package>
-                    </instructions>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-enforcer-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>check-artifact-size</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>enforce</goal>
-                        </goals>
-                        <configuration>
-                            <rules>
-                                <ArtifactSizeEnforcerRule implementation="org.codice.maven.artifactsize.ArtifactSizeEnforcerRule">
-                                    <maxArtifactSize>1.3_MB</maxArtifactSize>
-                                </ArtifactSizeEnforcerRule>
-                            </rules>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>default-check</id>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                        <configuration>
-                            <haltOnFailure>true</haltOnFailure>
-                            <rules>
-                                <rule>
-                                    <element>BUNDLE</element>
-                                    <!-- 
-                                    The reason for thesholds below 75% is because there are a few 
-                                    package private methods that are overridden in the test classes for 
-                                    testing purposes. 
-                                     -->
-                                    <limits>
-                                        <limit implementation="org.codice.jacoco.LenientLimit">
-                                            <counter>INSTRUCTION</counter>
-                                            <value>COVEREDRATIO</value>
-                                            <minimum>0.72</minimum>
-                                        </limit>
-                                        <limit implementation="org.codice.jacoco.LenientLimit">
-                                            <counter>BRANCH</counter>
-                                            <value>COVEREDRATIO</value>
-                                            <minimum>0.95</minimum>
-                                        </limit>
-                                        <limit implementation="org.codice.jacoco.LenientLimit">
-                                            <counter>COMPLEXITY</counter>
-                                            <value>COVEREDRATIO</value>
-                                            <minimum>0.75</minimum>
-                                        </limit>
-                                        
-                                    </limits>
-                                </rule>
-                            </rules>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+                            antlr4-runtime</Embed-Dependency>
+            <Import-Package>!org.abego.treelayout.*,
+                            *</Import-Package>
+          </instructions>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>check-artifact-size</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <ArtifactSizeEnforcerRule implementation="org.codice.maven.artifactsize.ArtifactSizeEnforcerRule">
+                  <maxArtifactSize>1.3_MB</maxArtifactSize>
+                </ArtifactSizeEnforcerRule>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>default-check</id>
+            <goals>
+              <goal>check</goal>
+            </goals>
+            <configuration>
+              <haltOnFailure>true</haltOnFailure>
+              <rules>
+                <rule>
+                  <element>BUNDLE</element>
+                  <limits>
+                    <limit implementation="org.codice.jacoco.LenientLimit">
+                      <counter>INSTRUCTION</counter>
+                      <value>COVEREDRATIO</value>
+                      <minimum>0.72</minimum>
+                    </limit>
+                    <limit implementation="org.codice.jacoco.LenientLimit">
+                      <counter>BRANCH</counter>
+                      <value>COVEREDRATIO</value>
+                      <minimum>0.95</minimum>
+                    </limit>
+                    <limit implementation="org.codice.jacoco.LenientLimit">
+                      <counter>COMPLEXITY</counter>
+                      <value>COVEREDRATIO</value>
+                      <minimum>0.75</minimum>
+                    </limit>
+                  </limits>
+                </rule>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 </project>

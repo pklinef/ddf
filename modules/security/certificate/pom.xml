@@ -12,20 +12,21 @@
  *
  **/
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>platform-security</artifactId>
-        <groupId>ddf.platform.security</groupId>
-        <version>2.22.0-SNAPSHOT</version>
-    </parent>
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>ddf.security.certificate</groupId>
-    <artifactId>certificate</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>security-certificate-keystoreeditor</module>
-        <module>security-certificate-generator</module>
-        <module>security-crl-generator</module>
-        <module>security-ocsp-checker</module>
-    </modules>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>ddf.modules.security</groupId>
+    <artifactId>security</artifactId>
+    <version>2.22.0-SNAPSHOT</version>
+  </parent>
+  <groupId>ddf.modules.security.certificate</groupId>
+  <artifactId>certificate</artifactId>
+  <packaging>pom</packaging>
+  <modules>
+    <module>security-certificate-keystoreeditor</module>
+    <module>security-certificate-generator</module>
+    <module>security-crl-generator</module>
+    <module>security-ocsp-checker</module>
+  </modules>
 </project>

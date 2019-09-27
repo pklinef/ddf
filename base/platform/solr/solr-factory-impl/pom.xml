@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
  * Copyright (c) Codice Foundation
@@ -32,7 +32,7 @@
         <dependency>
             <groupId>ddf.lib</groupId>
             <artifactId>common-system</artifactId>
-            <version>${project.version}</version>
+            <version>${ddf.lib.version}</version>
         </dependency>
         <dependency>
             <groupId>org.osgi</groupId>
@@ -86,7 +86,7 @@
         <dependency>
             <groupId>ddf.lib</groupId>
             <artifactId>test-common</artifactId>
-            <version>${project.version}</version>
+            <version>${ddf.lib.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -121,7 +121,7 @@
                         <Embed-Dependency>
                             platform-util
                         </Embed-Dependency>
-                        <Export-Package />
+                        <Export-Package/>
                     </instructions>
                 </configuration>
             </plugin>

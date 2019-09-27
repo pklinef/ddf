@@ -18,9 +18,9 @@
 
     <repository>mvn:org.apache.karaf.features/spring/${karaf.version}/xml/features</repository>
     <repository>mvn:ddf.features/cxf/${project.version}/xml/features</repository>
-    <repository>mvn:ddf.features/camel/${project.version}/xml/features</repository>
+<!--    <repository>mvn:ddf.features/camel/${project.version}/xml/features</repository>-->
     <repository>mvn:ddf.features/kernel/${project.version}/xml/features</repository>
-    <repository>mvn:ddf.features/utilities/${project.version}/xml/features</repository>
+    <repository>mvn:ddf.features.core/utilities/${project.version}/xml/features</repository>
     <repository>mvn:ddf.features/branding/${project.version}/xml/features</repository>
 
     <feature name="security-logger" version="${project.version}"
@@ -54,7 +54,7 @@
                 Remove wrapped OpenSAML after security refactor is complete  -->
         <!--  <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.opensaml/${opensaml.osgi.version}-->
         <!--  </bundle>-->
-        <bundle>mvn:ddf.lib.bundles/libs-bundles-opensaml/${project.version}</bundle>
+        <bundle>mvn:ddf.lib.bundles/libs-bundles-opensaml/${ddf.lib.version}</bundle>
 
         <bundle>mvn:ddf.security.core/security-core-api/${project.version}</bundle>
         <bundle>mvn:ddf.platform.security/security-rest-clientapi/${project.version}</bundle>
@@ -89,21 +89,21 @@
         <feature>war</feature>
     </feature>
 
-    <feature name="platform-http-proxy" version="${project.version}"
-             description="HTTP to HTTPS proxy.">
-        <feature>camel-jetty9</feature>
-        <feature>security-core-api</feature>
-        <feature>camel-blueprint</feature>
-        <feature>camel-http</feature>
-        <bundle>mvn:org.codice.thirdparty/commons-httpclient/3.1.0_1</bundle>
-        <bundle>mvn:ddf.platform/platform-http-proxy/${project.version}</bundle>
-    </feature>
+<!--    <feature name="platform-http-proxy" version="${project.version}"-->
+<!--             description="HTTP to HTTPS proxy.">-->
+<!--        <feature>camel-jetty9</feature>-->
+<!--        <feature>security-core-api</feature>-->
+<!--        <feature>camel-blueprint</feature>-->
+<!--        <feature>camel-http</feature>-->
+<!--        <bundle>mvn:org.codice.thirdparty/commons-httpclient/3.1.0_1</bundle>-->
+<!--        <bundle>mvn:ddf.platform/platform-http-proxy/${project.version}</bundle>-->
+<!--    </feature>-->
 
-    <feature name="session-manager-command" version="${project.version}"
-             description="Commands for managing active SAML sessions">
-        <feature>security-handler-api</feature>
-        <bundle>mvn:ddf.security.command/security-command-sessionmanager/${project.version}</bundle>
-    </feature>
+<!--    <feature name="session-manager-command" version="${project.version}"-->
+<!--             description="Commands for managing active SAML sessions">-->
+<!--        <feature>security-handler-api</feature>-->
+<!--        <bundle>mvn:ddf.security.command/security-command-sessionmanager/${project.version}</bundle>-->
+<!--    </feature>-->
 
     <feature name="session-invalidator" version="${project.version}"
              description="API for invalidating servlet sessions">
@@ -145,7 +145,7 @@ org.ops4j.pax.web.default.realmname=DDF
         <feature>util-uuidgenerator</feature>
         <feature>security-handler-api</feature>
         <feature>security-policy-context</feature>
-        <feature>security-core</feature>
+        <feature>security-core-impl</feature>
         <bundle>mvn:ddf.platform.security/security-rest-authn-service/${project.version}</bundle>
         <bundle>mvn:ddf.platform.security/security-rest-authn-impl/${project.version}</bundle>
         <bundle>mvn:ddf.platform.security/security-rest-authn-endpoint/${project.version}</bundle>
@@ -162,15 +162,15 @@ org.ops4j.pax.web.default.realmname=DDF
         <bundle>mvn:ddf.security.handler/security-handler-api/${project.version}</bundle>
     </feature>
 
-    <feature name="security-migratable" version="${project.version}"
-             description="Exports security configurations and system files">
-        <feature>guava</feature>
-        <bundle>mvn:com.google.code.gson/gson/${gson.version}</bundle>
-        <bundle>mvn:ddf.platform.migration/platform-migration-utils/${project.version}</bundle>
-        <bundle>mvn:ddf.platform.migration/platform-migratable-api/${project.version}</bundle>
-        <bundle>mvn:ddf.platform.api/platform-api/${project.version}</bundle>
-        <bundle>mvn:ddf.security.migration/security-migratable/${project.version}</bundle>
-    </feature>
+<!--    <feature name="security-migratable" version="${project.version}"-->
+<!--             description="Exports security configurations and system files">-->
+<!--        <feature>guava</feature>-->
+<!--        <bundle>mvn:com.google.code.gson/gson/${gson.version}</bundle>-->
+<!--        <bundle>mvn:ddf.platform.migration/platform-migration-utils/${project.version}</bundle>-->
+<!--        <bundle>mvn:ddf.platform.migration/platform-migratable-api/${project.version}</bundle>-->
+<!--        <bundle>mvn:ddf.platform.api/platform-api/${project.version}</bundle>-->
+<!--        <bundle>mvn:ddf.security.migration/security-migratable/${project.version}</bundle>-->
+<!--    </feature>-->
 
     <feature name="security-token-storage" version="${project.version}"
              description="OAuth token storage api and file storage implementation.">
@@ -180,7 +180,7 @@ org.ops4j.pax.web.default.realmname=DDF
         <bundle>mvn:ddf.security.storage/token-storage-impl/${project.version}</bundle>
     </feature>
 
-    <feature name="security-core" version="${project.version}"
+    <feature name="security-core-impl" version="${project.version}"
              description="Security Core">
         <feature>security-core-api</feature>
         <feature>security-handler-api</feature>
@@ -200,7 +200,7 @@ org.ops4j.pax.web.default.realmname=DDF
         <bundle>mvn:ddf.security.core/security-core-impl/${project.version}</bundle>
         <bundle>mvn:ddf.security.core/security-core-services/${project.version}</bundle>
         <bundle>mvn:ddf.platform.security/security-rest-cxfwrapper/${project.version}</bundle>
-        <feature>security-migratable</feature>
+<!--        <feature>security-migratable</feature>-->
     </feature>
 
     <feature name="security-expansion" version="${project.version}"
@@ -237,7 +237,7 @@ org.ops4j.pax.web.default.realmname=DDF
         <bundle>mvn:ddf.security.encryption/security-encryption-api/${project.version}</bundle>
         <feature>security-handler-api</feature>
         <feature dependency="true">oidc-dependencies</feature>
-        <feature>security-core</feature>
+        <feature>security-core-impl</feature>
         <bundle>mvn:ddf.security.pep/security-pep-interceptor/${project.version}</bundle>
     </feature>
 
@@ -265,7 +265,7 @@ org.ops4j.pax.web.default.realmname=DDF
         <bundle>mvn:org.apache.commons/commons-jexl/2.1.1</bundle>
         <feature>security-core-api</feature>
         <feature>security-handler-api</feature>
-        <feature>security-certificate</feature>
+<!--        <feature>security-certificate</feature>-->
         <bundle>mvn:ddf.security.handler/security-handler-pki/${project.version}</bundle>
         <bundle>wrap:mvn:org.springframework.ldap/spring-ldap-core/2.3.2.RELEASE</bundle>
     </feature>
@@ -313,7 +313,7 @@ org.ops4j.pax.web.default.realmname=DDF
     <feature name="security-guest-realm" version="${project.version}"
              description="Security Guest Realm.">
         <bundle>mvn:ddf.security.expansion/security-expansion-api/${project.version}</bundle>
-        <feature>security-core</feature>
+        <feature>security-core-impl</feature>
         <feature>javax-validation</feature>
         <feature>security-handler-api</feature>
         <feature>security-policy-context</feature>
@@ -340,29 +340,29 @@ org.ops4j.pax.web.default.realmname=DDF
         <bundle>mvn:ddf.security.sts/security-sts-ldapclaimshandler/${project.version}</bundle>
     </feature>
 
-    <feature name="ldap-embedded-default-configs" version="${project.version}"
-             description="Installs default embedded ldap claims handler and login configs">
-        <feature>ldap-embedded-default-claimshandler-config</feature>
-        <feature>ldap-embedded-default-stslogin-config</feature>
-    </feature>
+<!--    <feature name="ldap-embedded-default-configs" version="${project.version}"-->
+<!--             description="Installs default embedded ldap claims handler and login configs">-->
+<!--        <feature>ldap-embedded-default-claimshandler-config</feature>-->
+<!--        <feature>ldap-embedded-default-stslogin-config</feature>-->
+<!--    </feature>-->
 
-    <feature name="ldap-embedded-default-claimshandler-config" version="${project.version}"
-             description="Installs a default embedded ldap login config">
-        <configfile
-                finalname="${ddf.etc}/Claims_Handler_Manager-ddf.security.sts.claimsHandler.ClaimsHandlerManager.config"
-                override="false">
-            mvn:ddf.security.sts/security-sts-ldapclaimshandler/${project.version}/config/default-ldap-claimshandler
-        </configfile>
-    </feature>
+<!--    <feature name="ldap-embedded-default-claimshandler-config" version="${project.version}"-->
+<!--             description="Installs a default embedded ldap login config">-->
+<!--        <configfile-->
+<!--                finalname="${ddf.etc}/Claims_Handler_Manager-ddf.security.sts.claimsHandler.ClaimsHandlerManager.config"-->
+<!--                override="false">-->
+<!--            mvn:ddf.security.sts/security-sts-ldapclaimshandler/${project.version}/config/default-ldap-claimshandler-->
+<!--        </configfile>-->
+<!--    </feature>-->
 
-    <feature name="ldap-embedded-default-stslogin-config" version="${project.version}"
-             description="Installs a default embedded ldap claims handler config">
-        <configfile
-                finalname="${ddf.etc}/Ldap_Login_Config-ddf.ldap.ldaplogin.LdapLoginConfig.config"
-                override="false">
-            mvn:ddf.security.sts/security-sts-ldaplogin/${project.version}/config/default-ldaplogin
-        </configfile>
-    </feature>
+<!--    <feature name="ldap-embedded-default-stslogin-config" version="${project.version}"-->
+<!--             description="Installs a default embedded ldap claims handler config">-->
+<!--        <configfile-->
+<!--                finalname="${ddf.etc}/Ldap_Login_Config-ddf.ldap.ldaplogin.LdapLoginConfig.config"-->
+<!--                override="false">-->
+<!--            mvn:ddf.security.sts/security-sts-ldaplogin/${project.version}/config/default-ldaplogin-->
+<!--        </configfile>-->
+<!--    </feature>-->
 
     <feature name="security-handler-basic" version="${project.version}"
              description="Basic Authentication Handler for web applications.">
@@ -391,14 +391,14 @@ org.ops4j.pax.web.default.realmname=DDF
              description="OIDC Authentication Handler for web applications.">
         <feature>oidc-dependencies</feature>
         <feature>action-core-impl</feature>
-        <feature>security-core</feature>
+        <feature>security-core-impl</feature>
         <bundle>mvn:ddf.security.handler/security-handler-oidc/${project.version}</bundle>
     </feature>
 
     <feature name="security-handler-oauth" version="${project.version}"
       description="OIDC Authentication Handler for web applications.">
         <feature>oidc-dependencies</feature>
-        <feature>security-core</feature>
+        <feature>security-core-impl</feature>
         <bundle>mvn:ddf.security.handler/security-handler-oauth/${project.version}</bundle>
     </feature>
 
@@ -412,7 +412,7 @@ org.ops4j.pax.web.default.realmname=DDF
              description="OIDC Authentication Handler for web applications.">
         <feature>jackson</feature>
         <feature dependency="true">oidc-dependencies</feature>
-        <feature>security-core</feature>
+        <feature>security-core-impl</feature>
         <feature>security-handler-api</feature>
         <feature>security-handler-oidc</feature>
         <bundle>mvn:ddf.platform.security/security-oidc-realm/${project.version}</bundle>
@@ -420,7 +420,7 @@ org.ops4j.pax.web.default.realmname=DDF
 
     <feature name="security-filter-login" version="${project.version}"
              description="Login Filter for web applications.">
-        <feature>security-core</feature>
+        <feature>security-core-impl</feature>
         <feature>cxf-rs-security-sso-saml</feature>
         <bundle>mvn:ddf.security.expansion/security-expansion-api/${project.version}</bundle>
         <feature>javax-validation</feature>
@@ -447,7 +447,7 @@ org.ops4j.pax.web.default.realmname=DDF
 
     <feature name="security-filter-web-sso" version="${project.version}"
              description="Web SSO Filter for web applications.">
-        <feature>security-core</feature>
+        <feature>security-core-impl</feature>
         <feature>security-filter-api</feature>
         <feature>security-handler-api</feature>
         <feature>security-policy-context</feature>
@@ -486,7 +486,7 @@ org.ops4j.pax.web.default.realmname=DDF
         <feature>cxf-jaxrs</feature>
         <feature>security-handler-api</feature>
         <feature>security-policy-context</feature>
-        <feature>security-core</feature>
+        <feature>security-core-impl</feature>
         <feature>security-encryption</feature>
         <feature dependency="true">oidc-dependencies</feature>
         <bundle>mvn:ddf.security.interceptor/security-interceptor-guest/${project.version}</bundle>
@@ -512,20 +512,20 @@ org.ops4j.pax.web.default.realmname=DDF
         </bundle>
     </feature>
 
-    <feature name="security-certificate"
-             version="${project.version}"
-             description="Keystore editor MBean and associated web application.">
-        <bundle>mvn:org.codice.thirdparty/commons-httpclient/3.1.0_1</bundle>
-        <feature>security-core-api</feature>
-        <feature>security-core</feature>
-        <bundle>
-            mvn:ddf.security.certificate/security-certificate-keystoreeditor/${project.version}
-        </bundle>
-        <bundle>mvn:ddf.security.certificate/security-certificate-generator/${project.version}
-        </bundle>
-        <bundle>mvn:ddf.security.certificate/security-crl-generator/${project.version}</bundle>
-        <bundle>mvn:ddf.security.certificate/security-ocsp-checker/${project.version}</bundle>
-    </feature>
+<!--    <feature name="security-certificate"-->
+<!--             version="${project.version}"-->
+<!--             description="Keystore editor MBean and associated web application.">-->
+<!--        <bundle>mvn:org.codice.thirdparty/commons-httpclient/3.1.0_1</bundle>-->
+<!--        <feature>security-core-api</feature>-->
+<!--        <feature>security-core-impl</feature>-->
+<!--        <bundle>-->
+<!--            mvn:ddf.security.certificate/security-certificate-keystoreeditor/${project.version}-->
+<!--        </bundle>-->
+<!--        <bundle>mvn:ddf.security.certificate/security-certificate-generator/${project.version}-->
+<!--        </bundle>-->
+<!--        <bundle>mvn:ddf.security.certificate/security-crl-generator/${project.version}</bundle>-->
+<!--        <bundle>mvn:ddf.security.certificate/security-ocsp-checker/${project.version}</bundle>-->
+<!--    </feature>-->
 
     <feature name="security-guest" version="${project.version}"
              description="Contains all of the guest security features.">
@@ -533,22 +533,22 @@ org.ops4j.pax.web.default.realmname=DDF
         <feature>security-interceptor-guest</feature>
     </feature>
 
-    <feature name="security-servlet-logout" version="${project.version}"
-             description="Logout servlet.">
-        <feature>guava</feature>
-        <feature>cxf-frontend-javascript</feature>
-        <feature>action-core-impl</feature>
-        <bundle>mvn:ddf.security.expansion/security-expansion-api/${project.version}</bundle>
-        <feature>javax-validation</feature>
-        <feature>cxf-jaxrs</feature>
-        <feature>security-handler-api</feature>
-        <feature>security-core</feature>
-        <bundle>mvn:ddf.security.servlet/security-servlet-logout-service/${project.version}</bundle>
-        <bundle>mvn:ddf.security.servlet/security-servlet-default-logout/${project.version}</bundle>
-        <bundle>mvn:ddf.security.servlet/security-servlet-logout/${project.version}</bundle>
-        <bundle>mvn:ddf.security.servlet/security-servlet-logout-endpoint/${project.version}</bundle>
-        <bundle>mvn:com.google.code.gson/gson/${gson.version}</bundle>
-    </feature>
+<!--    <feature name="security-servlet-logout" version="${project.version}"-->
+<!--             description="Logout servlet.">-->
+<!--        <feature>guava</feature>-->
+<!--        <feature>cxf-frontend-javascript</feature>-->
+<!--        <feature>action-core-impl</feature>-->
+<!--        <bundle>mvn:ddf.security.expansion/security-expansion-api/${project.version}</bundle>-->
+<!--        <feature>javax-validation</feature>-->
+<!--        <feature>cxf-jaxrs</feature>-->
+<!--        <feature>security-handler-api</feature>-->
+<!--        <feature>security-core-impl</feature>-->
+<!--        <bundle>mvn:ddf.security.servlet/security-servlet-logout-service/${project.version}</bundle>-->
+<!--        <bundle>mvn:ddf.security.servlet/security-servlet-default-logout/${project.version}</bundle>-->
+<!--        <bundle>mvn:ddf.security.servlet/security-servlet-logout/${project.version}</bundle>-->
+<!--        <bundle>mvn:ddf.security.servlet/security-servlet-logout-endpoint/${project.version}</bundle>-->
+<!--        <bundle>mvn:com.google.code.gson/gson/${gson.version}</bundle>-->
+<!--    </feature>-->
 
     <feature name="security-servlet-session-expiry" version="${project.version}"
              description="Session expiry servlet.">
@@ -558,7 +558,7 @@ org.ops4j.pax.web.default.realmname=DDF
         <feature>cxf-frontend-javascript</feature>
         <feature>cxf-jaxrs</feature>
         <feature>security-handler-api</feature>
-        <feature>security-core</feature>
+        <feature>security-core-impl</feature>
         <feature dependency="true">oidc-dependencies</feature>
         <bundle>mvn:ddf.platform.security/session-management-service/${project.version}</bundle>
         <bundle>mvn:ddf.platform.security/session-management-impl/${project.version}</bundle>
@@ -567,12 +567,12 @@ org.ops4j.pax.web.default.realmname=DDF
 
     <feature name="security-servlet-whoami" version="${project.version}"
              description="Who Am I servlet.">
-        <feature>security-core</feature>
+        <feature>security-core-impl</feature>
         <bundle>mvn:ddf.security.servlet/security-servlet-whoami/${project.version}</bundle>
     </feature>
 
     <feature name="security-idp" version="${project.version}"
-             description="IDP server and client">
+             description="IDP client">
         <feature>security-core-api</feature>
         <feature>security-handler-api</feature>
         <feature>javax-validation</feature>
@@ -589,20 +589,20 @@ org.ops4j.pax.web.default.realmname=DDF
         <feature>security-handler-basic</feature>
         <feature>security-idp-plugin</feature>
         <feature dependency="true">oidc-dependencies</feature>
-        <feature>security-core</feature>
+        <feature>security-core-impl</feature>
         <feature>saml-validator</feature>
         <bundle>mvn:ddf.security/security-saml-util/${project.version}</bundle>
         <bundle>mvn:ddf.security.idp/security-idp-client/${project.version}</bundle>
         <bundle>mvn:ddf.security.encryption/security-encryption-api/${project.version}</bundle>
         <bundle>mvn:ddf.security.expansion/security-expansion-api/${project.version}</bundle>
-        <bundle>mvn:ddf.security.idp/security-idp-server/${project.version}</bundle>
+<!--        <bundle>mvn:ddf.security.idp/security-idp-server/${project.version}</bundle>-->
         <bundle>mvn:com.google.code.gson/gson/${gson.version}</bundle>
     </feature>
 
     <feature name="saml-validator" version="${project.version}" description="Saml token validator">
         <!--  TODO (https://github.com/codice/ddf/issues/5327)
                 Address potential circular dependencies as part of security refactor  -->
-        <feature>security-core</feature>
+        <feature>security-core-impl</feature>
         <bundle>mvn:ddf.security.saml/saml-assertion-validator/${project.version}</bundle>
         <bundle>mvn:ddf.security.saml/saml-assertion-validator-impl/${project.version}</bundle>
     </feature>
@@ -629,23 +629,23 @@ org.ops4j.pax.web.default.realmname=DDF
         <bundle>mvn:ddf.security.command/security-command-listener/${project.version}</bundle>
     </feature>
 
-    <feature name="platform-email" version="${project.version}" start-level="50">
-        <bundle>mvn:commons-lang/commons-lang/${commons-lang.version}</bundle>
-        <bundle>mvn:com.sun.mail/javax.mail/${javax-mail.version}</bundle>
-        <feature>guava</feature>
-        <bundle>mvn:ddf.platform.email/platform-email-api/${project.version}</bundle>
-        <feature>security-logger</feature>
-        <bundle>mvn:ddf.platform.email/platform-email-impl/${project.version}</bundle>
-    </feature>
+<!--    <feature name="platform-email" version="${project.version}" start-level="50">-->
+<!--        <bundle>mvn:commons-lang/commons-lang/${commons-lang.version}</bundle>-->
+<!--        <bundle>mvn:com.sun.mail/javax.mail/${javax-mail.version}</bundle>-->
+<!--        <feature>guava</feature>-->
+<!--        <bundle>mvn:ddf.platform.email/platform-email-api/${project.version}</bundle>-->
+<!--        <feature>security-logger</feature>-->
+<!--        <bundle>mvn:ddf.platform.email/platform-email-impl/${project.version}</bundle>-->
+<!--    </feature>-->
 
-    <feature name="platform-country-local" version="${project.version}"
-             description="Service to convert country codes into various formats by performing a local lookup.">
-        <feature>guava</feature>
-        <feature>security-core-api</feature>
-        <bundle>mvn:ddf.platform.country/platform-country-converter-api/${project.version}</bundle>
-        <bundle>mvn:ddf.platform.country/platform-country-converter-local/${project.version}
-        </bundle>
-    </feature>
+<!--    <feature name="platform-country-local" version="${project.version}"-->
+<!--             description="Service to convert country codes into various formats by performing a local lookup.">-->
+<!--        <feature>guava</feature>-->
+<!--        <feature>security-core-api</feature>-->
+<!--        <bundle>mvn:ddf.platform.country/platform-country-converter-api/${project.version}</bundle>-->
+<!--        <bundle>mvn:ddf.platform.country/platform-country-converter-local/${project.version}-->
+<!--        </bundle>-->
+<!--    </feature>-->
 
     <feature name="security-web-sso-defaults" version="${project.version}"
              description="Installs the default features needed for web-based SSO authentication.">
@@ -662,7 +662,7 @@ org.ops4j.pax.web.default.realmname=DDF
         <feature>security-handler-oauth</feature>
         <feature>security-filter-authz</feature>
         <feature>security-pdp-authz</feature>
-        <feature>security-servlet-logout</feature>
+<!--        <feature>security-servlet-logout</feature>-->
         <feature>security-servlet-whoami</feature>
         <feature>security-servlet-session-expiry</feature>
         <feature>security-sts-realm</feature>

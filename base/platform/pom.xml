@@ -16,7 +16,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>ddf</groupId>
-        <artifactId>ddf</artifactId>
+        <artifactId>base</artifactId>
         <version>2.22.0-SNAPSHOT</version>
     </parent>
     <groupId>ddf.platform</groupId>
@@ -53,11 +53,11 @@
                 <artifactId>commons-codec</artifactId>
                 <version>${commons-codec.version}</version>
             </dependency>
-            <dependency>
-                <groupId>ddf.platform</groupId>
-                <artifactId>platform-configuration</artifactId>
-                <version>${project.version}</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>ddf.platform</groupId>-->
+<!--                <artifactId>platform-configuration</artifactId>-->
+<!--                <version>${project.version}</version>-->
+<!--            </dependency>-->
             <dependency>
                 <groupId>ddf.platform.migration</groupId>
                 <artifactId>platform-migration</artifactId>
@@ -106,12 +106,12 @@
             <dependency>
                 <groupId>org.codice.ddf</groupId>
                 <artifactId>notifications</artifactId>
-                <version>${project.version}</version>
+                <version>${ddf.lib.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.codice.ddf</groupId>
                 <artifactId>activities</artifactId>
-                <version>${project.version}</version>
+                <version>${ddf.lib.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.cxf</groupId>
@@ -346,39 +346,19 @@
         </plugins>
     </build>
     <modules>
+        <module>action</module>
         <module>platform-api</module>
         <module>branding-api</module>
         <module>util</module>
         <module>platform-session-invalidator</module>
         <module>platform-paxweb-jettyconfig</module>
-        <module>platform-logging</module>
-        <module>platform-configuration-service</module>
-        <module>platform-configuration</module>
-        <module>platform-configuration-endpoint</module>
-        <module>io</module>
-        <module>migration</module>
-        <module>platform-migratable</module>
-        <module>parser</module>
-        <module>action</module>
-        <module>compression</module>
         <module>solr</module>
-        <module>persistence</module>
         <module>mime</module>
-        <module>metrics</module>
-        <module>platform-scheduler</module>
         <module>security</module>
-        <module>platform-commands</module>
         <module>security-filter-api</module>
         <module>error</module>
-        <module>platform-http-proxy</module>
-        <module>admin</module>
-        <module>landing-page</module>
-        <module>country-converter</module>
-        <module>usng4j</module>
-        <module>email</module>
+        <module>parser</module>
         <module>osgi</module>
         <module>branding-registry-impl</module>
-        <module>sync-installer</module>
-        <module>resource-bundle-locator</module>
     </modules>
 </project>

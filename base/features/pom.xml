@@ -15,7 +15,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>ddf</artifactId>
+        <artifactId>base</artifactId>
         <groupId>ddf</groupId>
         <version>2.22.0-SNAPSHOT</version>
     </parent>
@@ -25,14 +25,10 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>camel</module>
         <module>branding</module>
         <module>kernel</module>
-        <module>test-utilities</module>
         <module>karaf</module>
         <module>cxf</module>
-        <module>migration</module>
-        <module>admin</module>
         <module>solr</module>
         <module>security</module>
         <module>utilities</module>
@@ -41,47 +37,6 @@
     </modules>
 
     <properties>
-        <!--START versions for camel features in platform-app features
-        Copied from apache-camel-2.19.4-src/parent/pom.xml
-
-        DDF changes made
-        - Duplicated some properties in the root pom so that they may be used elsewhere in DDF
-        - Removed properties that are not used
-        - Replaced the value of "geronimo-jms2-spec-version" with "${geronimo-jms_2_spec.version}" to keep it in line with the rest of the project
-        - Added netty41 version and removed netty40 version
-        - make camel and artemis qpid-proton-j-bundle-version and qpid-jms-client-version match -->
-        <aws-java-sdk-bundle-version>${aws-java-sdk-bundle.version}</aws-java-sdk-bundle-version>
-        <commons-codec-version>${commons-codec.version}</commons-codec-version>
-        <commons-httpclient-bundle-version>3.1_7</commons-httpclient-bundle-version>
-        <commons-pool-version>${commons-pool.version}</commons-pool-version>
-        <commons-io-version>${commons-io.version}</commons-io-version>
-        <cxf-version-range>[3.1,4.0)</cxf-version-range>
-        <c3p0-bundle-version>0.9.5.3</c3p0-bundle-version>
-        <freemarker-version>2.3.28</freemarker-version>
-        <geronimo-jms-spec-version>1.1.1</geronimo-jms-spec-version>
-        <geronimo-jms2-spec-version>${geronimo-jms_2_spec.version}</geronimo-jms2-spec-version>
-        <geronimo-jta-spec-version>1.1.1</geronimo-jta-spec-version>
-        <camel.guava.version>19.0</camel.guava.version>
-        <cxf.jackson.version>2.9.9</cxf.jackson.version>
-        <hikaricp-version>2.3.13</hikaricp-version>
-        <httpcore4-version>4.4.10</httpcore4-version>
-        <httpclient4-version>4.5.6</httpclient4-version>
-        <jackson2-version>${cxf.jackson.version}</jackson2-version>
-        <javax-mail-version>1.6.1</javax-mail-version>
-        <javax.servlet-api-version>3.1.0</javax.servlet-api-version>
-        <junit-bundle-version>4.11_2</junit-bundle-version>
-        <metrics-version>${dropwizard.version}</metrics-version>
-        <netty-version>${netty.version}</netty-version>
-        <qpid-proton-j-version>${proton.version}</qpid-proton-j-version>
-        <mchange-commons-java-version>0.2.11</mchange-commons-java-version>
-        <netty41-version>4.1.16.Final</netty41-version>
-        <protobuf-version>${protobuf.version}</protobuf-version>
-        <qpid-proton-j-bundle-version>${proton.version}</qpid-proton-j-bundle-version>
-        <qpid-jms-client-version>${qpid-jms.version}</qpid-jms-client-version>
-        <quartz2-version>2.3.0</quartz2-version>
-        <servicemix-specs-version>2.9.0</servicemix-specs-version>
-        <spring-version-range>[4.3,6)</spring-version-range>
-        <!--END versions for camel features in platform-app-->
 
         <!--START versions for enterprise features in platform-app features
         Copied from karaf-4.1.2-src/pom.xml
@@ -100,26 +55,28 @@
         DDF changes made
         - Updated cxf.hibernate.validator.version to 5.3.6.Final and cxf.jasypt.bundle.version to 1.9.2_1 -->
         <!-- please maintain alphabetical order here -->
+        <cxf-version-range>[3.1,4.0)</cxf-version-range>
         <cxf.abdera.osgi.version>${abdera.osgi.version}</cxf.abdera.osgi.version>
         <cxf.abdera.version>${abdera.version}</cxf.abdera.version>
         <cxf.ahc.version>1.9.40</cxf.ahc.version>
         <cxf.atmosphere.version>2.4.23</cxf.atmosphere.version>
         <cxf.bcel.bundle.version>5.2_4</cxf.bcel.bundle.version>
         <cxf.classmate.version>1.1.0</cxf.classmate.version>
-        <cxf.commons-codec.version>${commons-codec-version}</cxf.commons-codec.version>
+        <cxf.commons-codec.version>${commons-codec.version}</cxf.commons-codec.version>
         <cxf.commons-collections.version>3.2.2</cxf.commons-collections.version>
         <cxf.commons-lang3.version>${commons-lang3.version}</cxf.commons-lang3.version>
         <cxf.dom4j.bundle.version>${dom4j.bundle.version}</cxf.dom4j.bundle.version>
         <cxf.dropwizard.version>3.2.6</cxf.dropwizard.version>
         <cxf.ehcache.version>2.10.6</cxf.ehcache.version>
         <cxf.fastinfoset.bundle.version>1.2.13_1</cxf.fastinfoset.bundle.version>
-        <cxf.geronimo.jms.version>${geronimo-jms-spec-version}</cxf.geronimo.jms.version>
-        <cxf.geronimo.transaction.version>${geronimo-jta-spec-version}</cxf.geronimo.transaction.version>
+        <cxf.geronimo.jms.version>1.1.1</cxf.geronimo.jms.version>
+        <cxf.geronimo.transaction.version>1.1.1</cxf.geronimo.transaction.version>
         <cxf.guava.version>20.0</cxf.guava.version>
         <cxf.hazelcast.version>3.9.4</cxf.hazelcast.version>
         <cxf.hibernate.validator.version>5.3.6.Final</cxf.hibernate.validator.version>
         <cxf.httpcomponents.asyncclient.version>4.1.4</cxf.httpcomponents.asyncclient.version>
         <cxf.httpcomponents.core.version>${httpcore.version}</cxf.httpcomponents.core.version>
+        <cxf.jackson.version>2.9.9</cxf.jackson.version>
         <cxf.james.mim4j.version>0.7.2</cxf.james.mim4j.version>
         <cxf.jasypt.bundle.version>1.9.2_1</cxf.jasypt.bundle.version>
         <cxf.javassist.version>3.21.0-GA</cxf.javassist.version>
@@ -171,6 +128,7 @@
         <!--  Third-party bundle versions. These should only be used in the features.xml file.
       Any bundle dependent on classes from these jars should depend on the jar itself -
       not on the bundlized version. -->
+        <javax.servlet-api-version>3.1.0</javax.servlet-api-version>
         <javax.inject.bundle.version>${javax.inject.version}_2</javax.inject.bundle.version>
         <commons.fileupload.version>1.3.2</commons.fileupload.version>
 
@@ -219,33 +177,33 @@
                         </execution>
                     </executions>
                 </plugin>
-                <plugin>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>testCompile</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-failsafe-plugin</artifactId>
-                    <!--Using version 2.17 instead of the latest (2.19.1) because everything after 2.17 has-->
-                    <!--problems connecting to the container or running the tests-->
-                    <configuration>
-                        <argLine>-Djava.awt.headless=true -noverify</argLine>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>integration-test</goal>
-                                <goal>verify</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
+<!--                <plugin>-->
+<!--                    <artifactId>maven-compiler-plugin</artifactId>-->
+<!--                    <executions>-->
+<!--                        <execution>-->
+<!--                            <goals>-->
+<!--                                <goal>testCompile</goal>-->
+<!--                            </goals>-->
+<!--                        </execution>-->
+<!--                    </executions>-->
+<!--                </plugin>-->
+<!--                <plugin>-->
+<!--                    <groupId>org.apache.maven.plugins</groupId>-->
+<!--                    <artifactId>maven-failsafe-plugin</artifactId>-->
+<!--                    &lt;!&ndash;Using version 2.17 instead of the latest (2.19.1) because everything after 2.17 has&ndash;&gt;-->
+<!--                    &lt;!&ndash;problems connecting to the container or running the tests&ndash;&gt;-->
+<!--                    <configuration>-->
+<!--                        <argLine>-Djava.awt.headless=true -noverify</argLine>-->
+<!--                    </configuration>-->
+<!--                    <executions>-->
+<!--                        <execution>-->
+<!--                            <goals>-->
+<!--                                <goal>integration-test</goal>-->
+<!--                                <goal>verify</goal>-->
+<!--                            </goals>-->
+<!--                        </execution>-->
+<!--                    </executions>-->
+<!--                </plugin>-->
             </plugins>
         </pluginManagement>
     </build>

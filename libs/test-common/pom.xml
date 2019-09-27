@@ -247,19 +247,19 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <configuration>
-                    <systemPropertyVariables>
-                        <java.awt.headless>true</java.awt.headless>
-                        <ddf.version>${project.version}</ddf.version>
-                    </systemPropertyVariables>
-                    <classpathDependencyExcludes>
-                        <classpathDependencyExclude>org.ops4j.pax.exam:pax-exam-container-karaf
-                        </classpathDependencyExclude>
-                    </classpathDependencyExcludes>
-                </configuration>
-            </plugin>
+<!--            <plugin>-->
+<!--                <artifactId>maven-failsafe-plugin</artifactId>-->
+<!--                <configuration>-->
+<!--                    <systemPropertyVariables>-->
+<!--                        <java.awt.headless>true</java.awt.headless>-->
+<!--                        <ddf.version>${project.version}</ddf.version>-->
+<!--                    </systemPropertyVariables>-->
+<!--                    <classpathDependencyExcludes>-->
+<!--                        <classpathDependencyExclude>org.ops4j.pax.exam:pax-exam-container-karaf-->
+<!--                        </classpathDependencyExclude>-->
+<!--                    </classpathDependencyExcludes>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
         </plugins>
     </build>
 </project>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
  * Copyright (c) Codice Foundation
@@ -39,7 +39,7 @@
         <dependency>
             <groupId>ddf.lib</groupId>
             <artifactId>gson-support</artifactId>
-            <version>${project.version}</version>
+            <version>${ddf.lib.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>
@@ -70,7 +70,7 @@
                             !com.sun.management,
                             *
                         </Import-Package>
-                        <Export-Package />
+                        <Export-Package/>
                     </instructions>
                 </configuration>
             </plugin>

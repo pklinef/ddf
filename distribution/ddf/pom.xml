@@ -15,10 +15,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>kernel</artifactId>
-        <groupId>org.codice.ddf</groupId>
+        <groupId>ddf</groupId>
+        <artifactId>distribution</artifactId>
         <version>2.22.0-SNAPSHOT</version>
-        <relativePath>../kernel/pom.xml</relativePath>
     </parent>
     <!--
     Packages the DDF Standard distribution, which consists of the DDF Core distribution.
@@ -26,10 +25,12 @@
     Note that this distribution has the DDF Kernel distribution as its parent, hence all of the maven goals in the DDF Kernel distribution pom will execute unless they are overridden in this pom.
     -->
     <artifactId>ddf</artifactId>
+    <groupId>org.codice.ddf</groupId>
     <name>DDF :: Distribution :: DDF</name>
     <packaging>pom</packaging>
     <properties>
         <distribution.file.name>ddf-${project.version}</distribution.file.name>
+        <setup.folder>target/dependencies</setup.folder>
     </properties>
     <build>
         <resources>
@@ -47,7 +48,26 @@
         </resources>
         <plugins>
             <!--
-                Adds all of the feature repositories from DDF Kernel distribution, and this DDF Standard distribution to the Karaf system folder, which is the repo for Karar at runtime.
+            Resources plugin will do filtering on dirs/files specified in
+            <resources> above. This will result in these files being
+            filtered and their generated resource being placed in target/classes
+            directory.
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>filter</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>resources</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--
+                Adds all of the feature repositories from DDF Kernel distribution, and this DDF Standard distribution to the Karaf system folder, which is the repo for Karaf at runtime.
             -->
             <plugin>
                 <groupId>org.apache.karaf.tooling</groupId>
@@ -63,13 +83,16 @@
                             <addTransitiveFeatures>false</addTransitiveFeatures>
                             <descriptors>
                                 <descriptor>
+                                    mvn:ddf.features/kernel/${project.version}/xml/features
+                                </descriptor>
+                                <descriptor>
                                     mvn:ddf.features/install-profiles/${project.version}/xml/features
                                 </descriptor>
                                 <descriptor>
                                     mvn:org.codice.ddf/ui/${project.version}/xml/features
                                 </descriptor>
                             </descriptors>
-                            <repository>${setup.folder}/${karaf.folder}/system</repository>
+                            <repository>${setup.folder}/ddf-kernel-${ddf.base.version}/system</repository>
                         </configuration>
                     </execution>
                 </executions>
@@ -79,34 +102,77 @@
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>copy-docs</id>
-                        <!--
-                        The unpack needs to run in an earlier phase than the copy,
-                        due to a recurring bug in maven that causes plugins in the
-                        same lifecycle phase to run in orders other than that which
-                        they were declared in.
-
-                        See https://issues.apache.org/jira/browse/MNG-5799 as well
-                        as the related tickets for more details.
-                        -->
-                        <phase>process-resources</phase>
+                        <id>unpack</id>
+                        <phase>generate-resources</phase>
                         <goals>
                             <goal>unpack</goal>
                         </goals>
                         <configuration>
                             <artifactItems>
                                 <artifactItem>
-                                    <groupId>ddf</groupId>
-                                    <artifactId>docs</artifactId>
-                                    <version>${project.version}</version>
-                                    <outputDirectory>${setup.folder}/docs
-                                    </outputDirectory>
-                                    <overWrite>true</overWrite>
-                                    <classifier>docs-export</classifier>
+                                    <groupId>org.codice.ddf</groupId>
+                                    <artifactId>kernel</artifactId>
+                                    <version>${ddf.base.version}</version>
                                     <type>zip</type>
+                                    <outputDirectory>${setup.folder}</outputDirectory>
                                 </artifactItem>
                             </artifactItems>
-                            <overWriteSnapshots>true</overWriteSnapshots>
+                        </configuration>
+                    </execution>
+<!--                    <execution>-->
+<!--                        <id>copy-docs</id>-->
+<!--                        &lt;!&ndash;-->
+<!--                        The unpack needs to run in an earlier phase than the copy,-->
+<!--                        due to a recurring bug in maven that causes plugins in the-->
+<!--                        same lifecycle phase to run in orders other than that which-->
+<!--                        they were declared in.-->
+
+<!--                        See https://issues.apache.org/jira/browse/MNG-5799 as well-->
+<!--                        as the related tickets for more details.-->
+<!--                        &ndash;&gt;-->
+<!--                        <phase>process-resources</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>unpack</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <artifactItems>-->
+<!--                                <artifactItem>-->
+<!--                                    <groupId>ddf</groupId>-->
+<!--                                    <artifactId>docs</artifactId>-->
+<!--                                    <version>${project.version}</version>-->
+<!--                                    <outputDirectory>${setup.folder}/docs-->
+<!--                                    </outputDirectory>-->
+<!--                                    <overWrite>true</overWrite>-->
+<!--                                    <classifier>docs-export</classifier>-->
+<!--                                    <type>zip</type>-->
+<!--                                </artifactItem>-->
+<!--                            </artifactItems>-->
+<!--                            <overWriteSnapshots>true</overWriteSnapshots>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+                </executions>
+            </plugin>
+            <!--
+            Uses the assembly descriptor in this DDF distribution project (bin.xml) which
+            also injects the copied common-bin.xml descriptor from ddf-common, to create
+            the ddf-kernel-xxx.zip distribution in the /target directory.
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>bin</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>src/main/descriptors/bin.xml</descriptor>
+                            </descriptors>
+                            <appendAssemblyId>false</appendAssemblyId>
+                            <finalName>${distribution.file.name}</finalName>
                         </configuration>
                     </execution>
                 </executions>
@@ -163,121 +229,133 @@
                 </plugins>
             </reporting>
         </profile>
-        <profile>
-            <id>release</id>
-            <dependencies>
-                <dependency>
-                    <groupId>ddf.catalog.core</groupId>
-                    <artifactId>catalog-core-api</artifactId>
-                    <version>${project.version}</version>
-                    <type>javadoc</type>
-                </dependency>
-                <dependency>
-                    <groupId>ddf.mime.core</groupId>
-                    <artifactId>mime-core-api</artifactId>
-                    <version>${project.version}</version>
-                    <type>javadoc</type>
-                </dependency>
-                <dependency>
-                    <groupId>ddf.action.core</groupId>
-                    <artifactId>action-core-api</artifactId>
-                    <version>${project.version}</version>
-                    <type>javadoc</type>
-                </dependency>
-                <dependency>
-                    <groupId>ddf.security.core</groupId>
-                    <artifactId>security-core-api</artifactId>
-                    <version>${project.version}</version>
-                    <type>javadoc</type>
-                </dependency>
-                <dependency>
-                    <groupId>ddf.security.encryption</groupId>
-                    <artifactId>security-encryption-api</artifactId>
-                    <version>${project.version}</version>
-                    <type>javadoc</type>
-                </dependency>
-            </dependencies>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-dependency-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>unpack-javadoc</id>
-                                <phase>generate-resources</phase>
-                                <goals>
-                                    <goal>unpack</goal>
-                                </goals>
-                                <configuration>
-                                    <artifactItems>
-                                        <artifactItem>
-                                            <groupId>ddf.catalog.core</groupId>
-                                            <artifactId>catalog-core-api</artifactId>
-                                            <version>${project.version}</version>
-                                            <type>javadoc</type>
-                                            <outputDirectory>${setup.folder}/catalog_api_javadoc
-                                            </outputDirectory>
-                                        </artifactItem>
-                                        <artifactItem>
-                                            <groupId>ddf.mime.core</groupId>
-                                            <artifactId>mime-core-api</artifactId>
-                                            <version>${project.version}</version>
-                                            <type>javadoc</type>
-                                            <outputDirectory>${setup.folder}/mime_api_javadoc
-                                            </outputDirectory>
-                                        </artifactItem>
-                                        <artifactItem>
-                                            <groupId>ddf.action.core</groupId>
-                                            <artifactId>action-core-api</artifactId>
-                                            <version>${project.version}</version>
-                                            <type>javadoc</type>
-                                            <outputDirectory>${setup.folder}/action_api_javadoc
-                                            </outputDirectory>
-                                        </artifactItem>
-                                        <artifactItem>
-                                            <groupId>ddf.security.core</groupId>
-                                            <artifactId>security-core-api</artifactId>
-                                            <version>${project.version}</version>
-                                            <type>javadoc</type>
-                                            <outputDirectory>${setup.folder}/security_api_javadoc
-                                            </outputDirectory>
-                                        </artifactItem>
-                                        <artifactItem>
-                                            <groupId>ddf.security.encryption</groupId>
-                                            <artifactId>security-encryption-api</artifactId>
-                                            <version>${project.version}</version>
-                                            <type>javadoc</type>
-                                            <outputDirectory>
-                                                ${setup.folder}/encryption_api_javadoc
-                                            </outputDirectory>
-                                        </artifactItem>
-                                    </artifactItems>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
+<!--        <profile>-->
+<!--            <id>release</id>-->
+<!--            <dependencies>-->
+<!--                <dependency>-->
+<!--                    <groupId>ddf.catalog.core</groupId>-->
+<!--                    <artifactId>catalog-core-api</artifactId>-->
+<!--                    <version>${project.version}</version>-->
+<!--                    <type>javadoc</type>-->
+<!--                </dependency>-->
+<!--                <dependency>-->
+<!--                    <groupId>ddf.mime.core</groupId>-->
+<!--                    <artifactId>mime-core-api</artifactId>-->
+<!--                    <version>${project.version}</version>-->
+<!--                    <type>javadoc</type>-->
+<!--                </dependency>-->
+<!--                <dependency>-->
+<!--                    <groupId>ddf.action.core</groupId>-->
+<!--                    <artifactId>action-core-api</artifactId>-->
+<!--                    <version>${project.version}</version>-->
+<!--                    <type>javadoc</type>-->
+<!--                </dependency>-->
+<!--                <dependency>-->
+<!--                    <groupId>ddf.security.core</groupId>-->
+<!--                    <artifactId>security-core-api</artifactId>-->
+<!--                    <version>${project.version}</version>-->
+<!--                    <type>javadoc</type>-->
+<!--                </dependency>-->
+<!--                <dependency>-->
+<!--                    <groupId>ddf.security.encryption</groupId>-->
+<!--                    <artifactId>security-encryption-api</artifactId>-->
+<!--                    <version>${project.version}</version>-->
+<!--                    <type>javadoc</type>-->
+<!--                </dependency>-->
+<!--            </dependencies>-->
+<!--            <build>-->
+<!--                <plugins>-->
+<!--                    <plugin>-->
+<!--                        <groupId>org.apache.maven.plugins</groupId>-->
+<!--                        <artifactId>maven-dependency-plugin</artifactId>-->
+<!--                        <executions>-->
+<!--                            <execution>-->
+<!--                                <id>unpack-javadoc</id>-->
+<!--                                <phase>generate-resources</phase>-->
+<!--                                <goals>-->
+<!--                                    <goal>unpack</goal>-->
+<!--                                </goals>-->
+<!--                                <configuration>-->
+<!--                                    <artifactItems>-->
+<!--                                        <artifactItem>-->
+<!--                                            <groupId>ddf.catalog.core</groupId>-->
+<!--                                            <artifactId>catalog-core-api</artifactId>-->
+<!--                                            <version>${project.version}</version>-->
+<!--                                            <type>javadoc</type>-->
+<!--                                            <outputDirectory>${setup.folder}/catalog_api_javadoc-->
+<!--                                            </outputDirectory>-->
+<!--                                        </artifactItem>-->
+<!--                                        <artifactItem>-->
+<!--                                            <groupId>ddf.mime.core</groupId>-->
+<!--                                            <artifactId>mime-core-api</artifactId>-->
+<!--                                            <version>${project.version}</version>-->
+<!--                                            <type>javadoc</type>-->
+<!--                                            <outputDirectory>${setup.folder}/mime_api_javadoc-->
+<!--                                            </outputDirectory>-->
+<!--                                        </artifactItem>-->
+<!--                                        <artifactItem>-->
+<!--                                            <groupId>ddf.action.core</groupId>-->
+<!--                                            <artifactId>action-core-api</artifactId>-->
+<!--                                            <version>${project.version}</version>-->
+<!--                                            <type>javadoc</type>-->
+<!--                                            <outputDirectory>${setup.folder}/action_api_javadoc-->
+<!--                                            </outputDirectory>-->
+<!--                                        </artifactItem>-->
+<!--                                        <artifactItem>-->
+<!--                                            <groupId>ddf.security.core</groupId>-->
+<!--                                            <artifactId>security-core-api</artifactId>-->
+<!--                                            <version>${project.version}</version>-->
+<!--                                            <type>javadoc</type>-->
+<!--                                            <outputDirectory>${setup.folder}/security_api_javadoc-->
+<!--                                            </outputDirectory>-->
+<!--                                        </artifactItem>-->
+<!--                                        <artifactItem>-->
+<!--                                            <groupId>ddf.security.encryption</groupId>-->
+<!--                                            <artifactId>security-encryption-api</artifactId>-->
+<!--                                            <version>${project.version}</version>-->
+<!--                                            <type>javadoc</type>-->
+<!--                                            <outputDirectory>-->
+<!--                                                ${setup.folder}/encryption_api_javadoc-->
+<!--                                            </outputDirectory>-->
+<!--                                        </artifactItem>-->
+<!--                                    </artifactItems>-->
+<!--                                </configuration>-->
+<!--                            </execution>-->
+<!--                        </executions>-->
+<!--                    </plugin>-->
+<!--                </plugins>-->
+<!--            </build>-->
+<!--        </profile>-->
     </profiles>
     <dependencies>
         <dependency>
+            <groupId>org.codice.ddf</groupId>
+            <artifactId>kernel</artifactId>
+            <version>${ddf.base.version}</version>
+            <type>zip</type>
+            <exclusions>
+                <exclusion>
+                    <artifactId>*</artifactId>
+                    <groupId>*</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
             <groupId>ddf</groupId>
             <artifactId>docs</artifactId>
-            <version>${project.version}</version>
+            <version>${ddf.docs.version}</version>
         </dependency>
         <dependency>
             <groupId>ddf.features</groupId>
             <artifactId>install-profiles</artifactId>
-            <version>${project.version}</version>
+            <version>${ddf.modules.version}</version>
             <classifier>features</classifier>
             <type>xml</type>
         </dependency>
         <dependency>
             <groupId>org.codice.ddf</groupId>
             <artifactId>ui</artifactId>
-            <version>${project.version}</version>
+            <version>${ddf.modules.version}</version>
             <classifier>features</classifier>
             <type>xml</type>
         </dependency>

@@ -12,59 +12,52 @@
  *
  **/
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>usng4j</artifactId>
-        <groupId>ddf.platform</groupId>
-        <version>2.22.0-SNAPSHOT</version>
-    </parent>
-    <modelVersion>4.0.0</modelVersion>
-
-    <groupId>ddf.platform.usng4j</groupId>
-    <artifactId>platform-usng4j-impl</artifactId>
-    <name>DDF :: Platform :: USNG4J :: Impl</name>
-    <packaging>bundle</packaging>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.codice.usng4j</groupId>
-            <artifactId>usng4j-api</artifactId>
-            <version>${usng4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.codice.usng4j</groupId>
-            <artifactId>usng4j-impl</artifactId>
-            <version>${usng4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>${commons-lang3.version}</version>
-        </dependency>
-    </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <extensions>true</extensions>
-                <configuration>
-                    <instructions>
-                        <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
-                        <Import-Package>
-                            !javax.annotation,
-                            *
-                        </Import-Package>
-                        <Export-Package />
-                        <Embed-Dependency>
-                            usng4j-impl,
-                            commons-lang3
-                        </Embed-Dependency>
-                    </instructions>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>ddf.modules.platform</groupId>
+    <artifactId>usng4j</artifactId>
+    <version>2.22.0-SNAPSHOT</version>
+  </parent>
+  <groupId>ddf.platform.usng4j</groupId>
+  <artifactId>platform-usng4j-impl</artifactId>
+  <packaging>bundle</packaging>
+  <name>DDF :: Platform :: USNG4J :: Impl</name>
+  <dependencies>
+    <dependency>
+      <groupId>org.codice.usng4j</groupId>
+      <artifactId>usng4j-api</artifactId>
+      <version>${usng4j.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codice.usng4j</groupId>
+      <artifactId>usng4j-impl</artifactId>
+      <version>${usng4j.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>${commons-lang3.version}</version>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+          <instructions>
+            <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+            <Import-Package>!javax.annotation,
+                            *</Import-Package>
+            <Export-Package />
+            <Embed-Dependency>usng4j-impl,
+                            commons-lang3</Embed-Dependency>
+          </instructions>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>

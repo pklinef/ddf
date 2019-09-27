@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
  * Copyright (c) Codice Foundation
@@ -41,7 +41,7 @@
         <dependency>
             <groupId>ddf.lib</groupId>
             <artifactId>common-system</artifactId>
-            <version>${project.version}</version>
+            <version>${ddf.lib.version}</version>
         </dependency>
         <dependency>
             <groupId>ddf.platform.util</groupId>
@@ -70,7 +70,7 @@
         <dependency>
             <groupId>ddf.thirdparty</groupId>
             <artifactId>rest-assured</artifactId>
-            <version>${project.version}</version>
+            <version>${ddf.thirdparty.version}</version>
         </dependency>
         <dependency>
             <groupId>org.ops4j.pax.web</groupId>

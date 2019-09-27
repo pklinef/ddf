@@ -39,7 +39,7 @@
         <dependency>
             <groupId>ddf.lib</groupId>
             <artifactId>gson-support</artifactId>
-            <version>${project.version}</version>
+            <version>${ddf.lib.version}</version>
         </dependency>
         <dependency>
             <groupId>org.opensaml</groupId>
@@ -103,7 +103,7 @@
         <dependency>
             <groupId>ddf.lib</groupId>
             <artifactId>common-system</artifactId>
-            <version>${project.version}</version>
+            <version>${ddf.lib.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -171,12 +171,12 @@
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
         </dependency>
-        <dependency>
-            <groupId>ddf.test.itests</groupId>
-            <artifactId>test-itests-common</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>ddf.test.itests</groupId>-->
+<!--            <artifactId>test-itests-common</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
     </dependencies>
     <dependencyManagement>
         <dependencies>
@@ -237,7 +237,7 @@
                             javax.annotation;version="[1.1,2)",
                             *
                         </Import-Package>
-                        <Export-Package />
+                        <Export-Package/>
                     </instructions>
                 </configuration>
             </plugin>

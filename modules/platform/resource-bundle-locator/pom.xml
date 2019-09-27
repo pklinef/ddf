@@ -12,18 +12,18 @@
  *
  **/
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <parent>
+    <groupId>ddf.modules.platform</groupId>
     <artifactId>platform</artifactId>
-    <groupId>ddf.platform</groupId>
     <version>2.22.0-SNAPSHOT</version>
   </parent>
-
-  <name>DDF :: Platform :: Resource Bundle Locator</name>
+  <groupId>ddf.platform</groupId>
   <artifactId>resource-bundle-locator</artifactId>
   <packaging>bundle</packaging>
-
+  <name>DDF :: Platform :: Resource Bundle Locator</name>
   <dependencies>
     <dependency>
       <groupId>com.google.guava</groupId>
@@ -31,7 +31,6 @@
       <version>${guava.version}</version>
     </dependency>
   </dependencies>
-
   <build>
     <plugins>
       <plugin>
@@ -40,9 +39,7 @@
         <configuration>
           <instructions>
             <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
-            <Export-Package>
-              ddf.platform.resource.bundle.locator
-            </Export-Package>
+            <Export-Package>ddf.platform.resource.bundle.locator</Export-Package>
           </instructions>
         </configuration>
       </plugin>
@@ -85,5 +82,4 @@
       </plugin>
     </plugins>
   </build>
-
 </project>

@@ -55,10 +55,10 @@
             <artifactId>catalog-core-api-impl</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>ddf.platform</groupId>
-            <artifactId>platform-configuration</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>ddf.platform</groupId>-->
+<!--            <artifactId>platform-configuration</artifactId>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>net.minidev</groupId>
             <artifactId>json-smart</artifactId>

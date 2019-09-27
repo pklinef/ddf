@@ -12,48 +12,43 @@
  *
  **/
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-
-    <parent>
-        <artifactId>registry</artifactId>
-        <groupId>org.codice.ddf.registry</groupId>
-        <version>2.22.0-SNAPSHOT</version>
-    </parent>
-
-    <artifactId>registry-federation-admin-api</artifactId>
-    <name>DDF :: Registry :: Federation :: Admin :: Api</name>
-    <packaging>bundle</packaging>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.codice.ddf.registry</groupId>
-            <artifactId>registry-federation-admin-service</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ddf.admin.core</groupId>
-            <artifactId>admin-core-api</artifactId>
-        </dependency>
-    </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <extensions>true</extensions>
-                <configuration>
-                    <instructions>
-                        <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
-                        <Bundle-Name>${project.name}</Bundle-Name>
-                        <Export-Package>
-                            org.codice.ddf.registry.federationadmin.internal
-                        </Export-Package>
-                    </instructions>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.codice.ddf.modules.registry</groupId>
+    <artifactId>registry</artifactId>
+    <version>2.22.0-SNAPSHOT</version>
+  </parent>
+  <groupId>org.codice.ddf.registry</groupId>
+  <artifactId>registry-federation-admin-api</artifactId>
+  <packaging>bundle</packaging>
+  <name>DDF :: Registry :: Federation :: Admin :: Api</name>
+  <dependencies>
+    <dependency>
+      <groupId>org.codice.ddf.registry</groupId>
+      <artifactId>registry-federation-admin-service</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>ddf.admin.core</groupId>
+      <artifactId>admin-core-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+          <instructions>
+            <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+            <Bundle-Name>${project.name}</Bundle-Name>
+            <Export-Package>org.codice.ddf.registry.federationadmin.internal</Export-Package>
+          </instructions>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>

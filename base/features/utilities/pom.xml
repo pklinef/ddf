@@ -21,6 +21,7 @@
     </parent>
 
     <name>DDF :: Features :: Utilities</name>
+    <groupId>ddf.features.core</groupId>
     <artifactId>utilities</artifactId>
     <packaging>feature</packaging>
 
@@ -35,16 +36,16 @@
             <artifactId>util-uuidgenerator-impl</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>ddf.platform.usng4j</groupId>
-            <artifactId>platform-usng4j-api</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ddf.platform.usng4j</groupId>
-            <artifactId>platform-usng4j-impl</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>ddf.platform.usng4j</groupId>-->
+<!--            <artifactId>platform-usng4j-api</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>ddf.platform.usng4j</groupId>-->
+<!--            <artifactId>platform-usng4j-impl</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>ddf.platform</groupId>
             <artifactId>platform-parser-api</artifactId>
@@ -100,36 +101,36 @@
             <artifactId>mime-tika-resolver</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>ddf.compression</groupId>
-            <artifactId>compression-exi</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ddf.compression</groupId>
-            <artifactId>compression-gzip</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>ddf.compression</groupId>-->
+<!--            <artifactId>compression-exi</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>ddf.compression</groupId>-->
+<!--            <artifactId>compression-gzip</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>ddf.lib</groupId>
             <artifactId>common-system</artifactId>
-            <version>${project.version}</version>
+            <version>${ddf.lib.version}</version>
         </dependency>
-        <dependency>
-            <groupId>ddf.platform</groupId>
-            <artifactId>platform-logging</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>ddf.platform</groupId>-->
+<!--            <artifactId>platform-logging</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>ddf.platform.api</groupId>
             <artifactId>platform-api</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.codice.thirdparty</groupId>
-            <artifactId>tika-bundle</artifactId>
-            <version>${tika.thirdparty.bundle.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.codice.thirdparty</groupId>-->
+<!--            <artifactId>tika-bundle</artifactId>-->
+<!--            <version>${tika.thirdparty.bundle.version}</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>ddf.platform</groupId>
             <artifactId>bootflag-api</artifactId>
@@ -143,42 +144,42 @@
             <type>xml</type>
             <classifier>features</classifier>
         </dependency>
-        <dependency>
-            <groupId>ddf.features</groupId>
-            <artifactId>kernel</artifactId>
-            <version>${project.version}</version>
-            <type>xml</type>
-            <classifier>features</classifier>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>ddf.features</groupId>-->
+<!--            <artifactId>kernel</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--            <type>xml</type>-->
+<!--            <classifier>features</classifier>-->
+<!--        </dependency>-->
         <!--end feature dependencies-->
 
-        <dependency>
-            <groupId>ddf.platform</groupId>
-            <artifactId>sync-installer-api</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.codice.ddf</groupId>
-            <artifactId>kernel</artifactId>
-            <version>${project.version}</version>
-            <type>zip</type>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>ddf.lib</groupId>
-            <artifactId>test-common</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>ddf.features</groupId>
-            <artifactId>test-utilities</artifactId>
-            <version>${project.version}</version>
-            <type>xml</type>
-            <classifier>features</classifier>
-            <scope>test</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>ddf.platform</groupId>-->
+<!--            <artifactId>sync-installer-api</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.codice.ddf</groupId>-->
+<!--            <artifactId>kernel</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--            <type>zip</type>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>ddf.lib</groupId>-->
+<!--            <artifactId>test-common</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>ddf.features</groupId>-->
+<!--            <artifactId>test-utilities</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--            <type>xml</type>-->
+<!--            <classifier>features</classifier>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
     </dependencies>
     <build>
         <plugins>
@@ -196,9 +197,9 @@
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
             </plugin>
-            <plugin>
-                <artifactId>maven-failsafe-plugin</artifactId>
-            </plugin>
+<!--            <plugin>-->
+<!--                <artifactId>maven-failsafe-plugin</artifactId>-->
+<!--            </plugin>-->
         </plugins>
     </build>
 </project>

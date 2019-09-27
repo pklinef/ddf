@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
  * Copyright (c) Codice Foundation
@@ -13,49 +13,54 @@
  **/
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <artifactId>platform-solr</artifactId>
-        <groupId>ddf.platform.solr</groupId>
-        <version>2.22.0-SNAPSHOT</version>
-    </parent>
-    <artifactId>solr-password</artifactId>
-    <name>DDF :: Platform :: Solr :: Password</name>
-    <packaging>bundle</packaging>
-    <dependencies>
-        <dependency>
-            <groupId>ddf.platform.util</groupId>
-            <artifactId>util-uuidgenerator-api</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ddf.security.encryption</groupId>
-            <artifactId>security-encryption-api</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ddf.platform.security</groupId>
-            <artifactId>security-rest-clientapi</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ddf.admin.core</groupId>
-            <artifactId>admin-core-api</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-    </dependencies>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <configuration>
-                    <instructions>
-                        <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
-                        <Embed-Dependency>org.apache.felix.utils</Embed-Dependency>
-                    </instructions>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>ddf.modules.platform.solr</groupId>
+    <artifactId>solr</artifactId>
+    <version>2.22.0-SNAPSHOT</version>
+  </parent>
+  <groupId>ddf.platform.solr</groupId>
+  <artifactId>solr-password</artifactId>
+  <packaging>bundle</packaging>
+  <name>DDF :: Platform :: Solr :: Password</name>
+  <dependencies>
+    <dependency>
+      <groupId>ddf.platform.util</groupId>
+      <artifactId>util-uuidgenerator-api</artifactId>
+      <version>${ddf.base.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>ddf.security.encryption</groupId>
+      <artifactId>security-encryption-api</artifactId>
+      <version>${ddf.base.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>ddf.platform.security</groupId>
+      <artifactId>security-rest-clientapi</artifactId>
+      <version>${ddf.base.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>ddf.admin.core</groupId>
+      <artifactId>admin-core-api</artifactId>
+      <version>${ddf.base.version}</version>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <configuration>
+          <instructions>
+            <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+            <Embed-Dependency>org.apache.felix.utils</Embed-Dependency>
+          </instructions>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
 </project>

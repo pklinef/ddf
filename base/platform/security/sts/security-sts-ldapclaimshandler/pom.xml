@@ -47,10 +47,10 @@
             <groupId>ddf.security.core</groupId>
             <artifactId>security-core-api</artifactId>
         </dependency>
-        <dependency>
-            <groupId>ddf.platform</groupId>
-            <artifactId>platform-configuration</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>ddf.platform</groupId>-->
+<!--            <artifactId>platform-configuration</artifactId>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
  * Copyright (c) Codice Foundation
@@ -46,9 +46,14 @@
             <version>${org.slf4j.version}</version>
         </dependency>
         <dependency>
-            <groupId>ddf.platform</groupId>
-            <artifactId>platform-configuration</artifactId>
-            <version>${project.version}</version>
+            <groupId>ddf.lib</groupId>
+            <artifactId>common-system</artifactId>
+            <version>${ddf.lib.version}</version>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>ddf.platform</groupId>-->
+<!--            <artifactId>platform-configuration</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--        </dependency>-->
     </dependencies>
 </project>

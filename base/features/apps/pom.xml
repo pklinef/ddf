@@ -20,18 +20,19 @@
         <version>2.22.0-SNAPSHOT</version>
     </parent>
     <name>DDF :: Features :: Apps</name>
+    <groupId>ddf.features.core</groupId>
     <artifactId>apps</artifactId>
     <packaging>feature</packaging>
 
     <dependencies>
         <!--feature dependencies-->
-        <dependency>
-            <groupId>ddf.features</groupId>
-            <artifactId>admin</artifactId>
-            <version>${project.version}</version>
-            <type>xml</type>
-            <classifier>features</classifier>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>ddf.features</groupId>-->
+<!--            <artifactId>admin</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--            <type>xml</type>-->
+<!--            <classifier>features</classifier>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>ddf.features</groupId>
             <artifactId>branding</artifactId>
@@ -39,13 +40,13 @@
             <type>xml</type>
             <classifier>features</classifier>
         </dependency>
-        <dependency>
-            <groupId>ddf.features</groupId>
-            <artifactId>camel</artifactId>
-            <version>${project.version}</version>
-            <type>xml</type>
-            <classifier>features</classifier>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>ddf.features</groupId>-->
+<!--            <artifactId>camel</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--            <type>xml</type>-->
+<!--            <classifier>features</classifier>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>ddf.features</groupId>
             <artifactId>cxf</artifactId>
@@ -67,29 +68,29 @@
             <type>xml</type>
             <classifier>features</classifier>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>ddf.features</groupId>-->
+<!--            <artifactId>migration</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--            <type>xml</type>-->
+<!--            <classifier>features</classifier>-->
+<!--        </dependency>-->
         <dependency>
-            <groupId>ddf.features</groupId>
-            <artifactId>migration</artifactId>
-            <version>${project.version}</version>
-            <type>xml</type>
-            <classifier>features</classifier>
-        </dependency>
-        <dependency>
-            <groupId>ddf.features</groupId>
+            <groupId>ddf.features.core</groupId>
             <artifactId>security</artifactId>
             <version>${project.version}</version>
             <type>xml</type>
             <classifier>features</classifier>
         </dependency>
         <dependency>
-            <groupId>ddf.features</groupId>
+            <groupId>ddf.features.core</groupId>
             <artifactId>solr</artifactId>
             <version>${project.version}</version>
             <type>xml</type>
             <classifier>features</classifier>
         </dependency>
         <dependency>
-            <groupId>ddf.features</groupId>
+            <groupId>ddf.features.core</groupId>
             <artifactId>utilities</artifactId>
             <version>${project.version}</version>
             <type>xml</type>
@@ -98,46 +99,46 @@
         <!--end feature dependencies-->
         <dependency>
             <groupId>ddf.catalog</groupId>
-            <artifactId>catalog-app</artifactId>
+            <artifactId>catalog-core</artifactId>
             <version>${project.version}</version>
             <type>xml</type>
             <classifier>features</classifier>
         </dependency>
-        <dependency>
-            <groupId>org.codice.ddf.spatial</groupId>
-            <artifactId>geowebcache-app</artifactId>
-            <version>${project.version}</version>
-            <type>xml</type>
-            <classifier>features</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.codice.ddf.registry</groupId>
-            <artifactId>registry-app</artifactId>
-            <version>${project.version}</version>
-            <type>xml</type>
-            <classifier>features</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.codice.ddf.resourcemanagement</groupId>
-            <artifactId>resourcemanagement-app</artifactId>
-            <version>${project.version}</version>
-            <type>xml</type>
-            <classifier>features</classifier>
-        </dependency>
-        <dependency>
-            <groupId>ddf.ui</groupId>
-            <artifactId>search-ui-app</artifactId>
-            <version>${project.version}</version>
-            <type>xml</type>
-            <classifier>features</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.codice.ddf.spatial</groupId>
-            <artifactId>spatial-app</artifactId>
-            <version>${project.version}</version>
-            <type>xml</type>
-            <classifier>features</classifier>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.codice.ddf.spatial</groupId>-->
+<!--            <artifactId>geowebcache-app</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--            <type>xml</type>-->
+<!--            <classifier>features</classifier>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.codice.ddf.registry</groupId>-->
+<!--            <artifactId>registry-app</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--            <type>xml</type>-->
+<!--            <classifier>features</classifier>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.codice.ddf.resourcemanagement</groupId>-->
+<!--            <artifactId>resourcemanagement-app</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--            <type>xml</type>-->
+<!--            <classifier>features</classifier>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>ddf.ui</groupId>-->
+<!--            <artifactId>search-ui-app</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--            <type>xml</type>-->
+<!--            <classifier>features</classifier>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.codice.ddf.spatial</groupId>-->
+<!--            <artifactId>spatial-app</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--            <type>xml</type>-->
+<!--            <classifier>features</classifier>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>ddf.catalog.solr</groupId>
             <artifactId>solr-app</artifactId>
@@ -145,48 +146,48 @@
             <type>xml</type>
             <classifier>features</classifier>
         </dependency>
-        <dependency>
-            <groupId>org.codice.opendj.embedded</groupId>
-            <artifactId>opendj-embedded-app</artifactId>
-            <version>${opendj-embedded.app.version}</version>
-            <type>xml</type>
-            <classifier>features</classifier>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.codice.opendj.embedded</groupId>-->
+<!--            <artifactId>opendj-embedded-app</artifactId>-->
+<!--            <version>${opendj-embedded.app.version}</version>-->
+<!--            <type>xml</type>-->
+<!--            <classifier>features</classifier>-->
+<!--        </dependency>-->
         <!--end feature dependencies-->
 
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
-            <version>${apache-log4j.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>ddf.platform</groupId>
-            <artifactId>sync-installer-api</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.codice.ddf</groupId>
-            <artifactId>kernel</artifactId>
-            <version>${project.version}</version>
-            <type>zip</type>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>ddf.lib</groupId>
-            <artifactId>test-common</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>ddf.features</groupId>
-            <artifactId>test-utilities</artifactId>
-            <version>${project.version}</version>
-            <type>xml</type>
-            <classifier>features</classifier>
-            <scope>test</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.apache.logging.log4j</groupId>-->
+<!--            <artifactId>log4j-api</artifactId>-->
+<!--            <version>${apache-log4j.version}</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>ddf.platform</groupId>-->
+<!--            <artifactId>sync-installer-api</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.codice.ddf</groupId>-->
+<!--            <artifactId>kernel</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--            <type>zip</type>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>ddf.lib</groupId>-->
+<!--            <artifactId>test-common</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>ddf.features</groupId>-->
+<!--            <artifactId>test-utilities</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--            <type>xml</type>-->
+<!--            <classifier>features</classifier>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
     </dependencies>
 
     <build>
@@ -205,9 +206,9 @@
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
             </plugin>
-            <plugin>
-                <artifactId>maven-failsafe-plugin</artifactId>
-            </plugin>
+<!--            <plugin>-->
+<!--                <artifactId>maven-failsafe-plugin</artifactId>-->
+<!--            </plugin>-->
         </plugins>
     </build>
 </project>

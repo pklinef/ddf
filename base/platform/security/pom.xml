@@ -44,11 +44,11 @@
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
             </dependency>
-            <dependency>
-                <groupId>ddf.platform</groupId>
-                <artifactId>platform-configuration</artifactId>
-                <version>${project.version}</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>ddf.platform</groupId>-->
+<!--                <artifactId>platform-configuration</artifactId>-->
+<!--                <version>${project.version}</version>-->
+<!--            </dependency>-->
             <dependency>
                 <groupId>ddf.security.pdp</groupId>
                 <artifactId>security-pdp-authzrealm</artifactId>
@@ -199,7 +199,6 @@
     </dependencyManagement>
     <modules>
         <module>security-oidc-bundle</module>
-        <module>security-token-storage</module>
         <module>platform-security-core-api</module>
         <module>security-saml-util</module>
         <module>encryption</module>
@@ -217,13 +216,12 @@
         <module>session-management-impl</module>
         <module>servlet</module>
         <module>interceptor</module>
-        <module>certificate</module>
         <module>idp</module>
         <module>rest</module>
-        <module>security-migratable</module>
         <module>command</module>
         <module>secure-boot</module>
         <module>security-guest-realm</module>
         <module>security-oidc-realm</module>
+        <module>security-token-storage</module>
     </modules>
 </project>

@@ -14,11 +14,17 @@
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>ddf</groupId>
+        <artifactId>ddf-parent</artifactId>
+        <version>1.0.8</version>
+        <relativePath></relativePath>
+    </parent>
     <groupId>ddf</groupId>
-    <artifactId>ddf</artifactId>
+    <artifactId>base</artifactId>
     <version>2.22.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>DDF Reactor</name>
+    <name>DDF Base Reactor</name>
     <description>Distributed Data Framework (DDF) Parent</description>
     <inceptionYear>2010</inceptionYear>
     <organization>
@@ -43,11 +49,6 @@
             <subscribe>http://groups.google.com/group/ddf-users/subscribe</subscribe>
         </mailingList>
     </mailingLists>
-    <parent>
-        <groupId>ddf</groupId>
-        <artifactId>ddf-parent</artifactId>
-        <version>1.0.8</version>
-    </parent>
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -55,6 +56,8 @@
         <ddf.scm.connection.url />
         <snapshots.repository.url />
         <reports.repository.url />
+        <ddf.lib.version>${project.version}</ddf.lib.version>
+        <ddf.thirdparty.version>${project.version}</ddf.thirdparty.version>
         <!-- Must MANUALLY update this if the ddf/support project's version changes -->
         <ddf.support.version>2.3.16</ddf.support.version>
         <!-- Must MANUALLY update this if the codice-maven project's version changes -->
@@ -523,8 +526,8 @@
                                 <goal>verify</goal>
                             </goals>
                             <configuration>
-                              <argLine>${failsafe.argline}</argLine>
-                              <skipAfterFailureCount>1</skipAfterFailureCount>
+                                <argLine>${failsafe.argline}</argLine>
+                                <skipAfterFailureCount>1</skipAfterFailureCount>
                             </configuration>
                         </execution>
                     </executions>
@@ -1223,13 +1226,13 @@
         </pluginRepository>
     </pluginRepositories>
     <modules>
-        <module>ui</module>
-        <module>gitsetup</module>
-        <module>thirdparty</module>
-        <module>libs</module>
+<!--        <module>ui</module>-->
+<!--        <module>gitsetup</module>-->
+<!--        <module>thirdparty</module>-->
+<!--        <module>libs</module>-->
         <module>platform</module>
         <module>catalog</module>
-        <module>distribution</module>
         <module>features</module>
+        <module>distribution</module>
     </modules>
 </project>

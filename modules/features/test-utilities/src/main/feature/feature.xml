@@ -16,7 +16,7 @@
           xmlns="http://karaf.apache.org/xmlns/features/v1.3.0"
           xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.3.0 http://karaf.apache.org/xmlns/features/v1.3.0">
 
-    <repository>mvn:ddf.features/kernel/${project.version}/xml/features</repository>
+    <repository>mvn:ddf.features/kernel/${ddf.base.version}/xml/features</repository>
 
     <feature name="test-common" version="${project.version}"
              description="Common utilities for testing">
@@ -25,7 +25,7 @@
         <bundle>mvn:org.apache.commons/commons-compress/1.18</bundle>
         <bundle>mvn:commons-io/commons-io/${commons-io.version}</bundle>
         <bundle>mvn:org.apache.commons/commons-lang3/3.5</bundle>
-        <bundle>mvn:ddf.lib/test-common/${project.version}</bundle>
+        <bundle>mvn:ddf.lib/test-common/${ddf.lib.version}</bundle>
     </feature>
 
     <feature name="hamcrest-all" version="${project.version}"
@@ -52,7 +52,7 @@
     </feature>
 
     <feature name="rest-assured" version="${project.version}">
-        <bundle>mvn:ddf.thirdparty/rest-assured/${project.version}</bundle>
+        <bundle>mvn:ddf.thirdparty/rest-assured/${ddf.thirdparty.version}</bundle>
         <bundle>mvn:org.apache.httpcomponents/httpcore-osgi/${httpcore.version}</bundle>
         <bundle>mvn:org.apache.httpcomponents/httpclient-osgi/${httpclient.version}</bundle>
         <bundle>
@@ -66,6 +66,7 @@
         <bundle>mvn:org.json/json/${org.json.version}</bundle>
         <bundle>mvn:com.google.protobuf/protobuf-java/${protobuf.version}</bundle>
         <bundle>wrap:mvn:com.google.crypto.tink/tink/${tink.version}</bundle>
-        <bundle>wrap:mvn:ddf.security.encryption/security-encryption-crypter/${project.version}</bundle>
+        <bundle>wrap:mvn:ddf.security.encryption/security-encryption-crypter/${ddf.base.version}</bundle>
     </feature>
+
 </features>

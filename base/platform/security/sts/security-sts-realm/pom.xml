@@ -53,10 +53,6 @@
             <artifactId>security-encryption-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>ddf.platform</groupId>
-            <artifactId>platform-configuration</artifactId>
-        </dependency>
-        <dependency>
             <groupId>ddf.security.policy</groupId>
             <artifactId>security-policy-api</artifactId>
             <version>${project.version}</version>

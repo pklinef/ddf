@@ -36,13 +36,13 @@
                     org.locationtech.jts:jts-core
                 </include>
             </includes>
-            <outputDirectory>/server/solr-webapp/webapp/WEB-INF/lib</outputDirectory>
+            <outputDirectory>./server/solr-webapp/webapp/WEB-INF/lib</outputDirectory>
         </dependencySet>
         <dependencySet>
             <includes>
                 <include>org.codice.pro-grade:pro-grade</include>
             </includes>
-            <outputDirectory>/security</outputDirectory>
+            <outputDirectory>./security</outputDirectory>
         </dependencySet>
     </dependencySets>
     <fileSets>
@@ -54,7 +54,7 @@
         <fileSet>
             <directory>src/main/resources
             </directory>
-            <outputDirectory>/</outputDirectory>
+            <outputDirectory>./</outputDirectory>
             <includes>
                 <include>bin/*</include>
             </includes>
@@ -65,13 +65,13 @@
         <fileSet>
             <fileMode>0644</fileMode>
             <directory>src/main/resources</directory>
-            <outputDirectory>/</outputDirectory>
+            <outputDirectory>./</outputDirectory>
         </fileSet>
 
         <!--The files from the Apache Solr distribution-->
         <fileSet>
             <directory>${project.build.directory}/solr-${solr.version}</directory>
-            <outputDirectory>/</outputDirectory>
+            <outputDirectory>./</outputDirectory>
         </fileSet>
     </fileSets>
 </assembly>

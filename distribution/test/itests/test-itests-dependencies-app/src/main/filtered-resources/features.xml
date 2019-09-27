@@ -17,7 +17,8 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.3.0 http://karaf.apache.org/xmlns/features/v1.3.0">
 
-    <repository>mvn:ddf.features/test-utilities/${project.version}/xml/features</repository>
+    <repository>mvn:ddf.features/camel/${ddf.modules.version}/xml/features</repository>
+    <repository>mvn:ddf.features/test-utilities/${ddf.modules.version}/xml/features</repository>
 
     <feature name="ddf-itest-dependencies" version="${project.version}">
         <feature prerequisite="true">wrap</feature>
@@ -26,17 +27,17 @@
     </feature>
 
     <feature name="ddf-dependencies" version="${project.version}">
-        <feature>catalog-core</feature>
+        <feature>catalog-core-impl</feature>
         <feature>rest-assured</feature>
 
         <bundle>
-            wrap:mvn:ddf.security/ddf-security-common/${project.version}$Bundle-SymbolicName=itest-test-security-common
+            wrap:mvn:ddf.security/ddf-security-common/${ddf.base.version}$Bundle-SymbolicName=itest-test-security-common
         </bundle>
         <bundle>mvn:ddf.test.itests/test-itests-common/${project.version}</bundle>
-        <bundle>mvn:ddf.lib/test-common/${project.version}</bundle>
-        <bundle>wrap:mvn:ddf.lib/gson-support/${project.version}</bundle>
+        <bundle>mvn:ddf.lib/test-common/${ddf.lib.version}</bundle>
+        <bundle>wrap:mvn:ddf.lib/gson-support/${ddf.lib.version}</bundle>
 
-        <bundle>mvn:ddf.thirdparty/restito/${project.version}</bundle>
+        <bundle>mvn:ddf.thirdparty/restito/${ddf.thirdparty.version}</bundle>
         <feature>camel-sjms2</feature>
     </feature>
 

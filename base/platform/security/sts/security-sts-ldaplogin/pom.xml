@@ -167,10 +167,10 @@
             <groupId>ddf.security.core</groupId>
             <artifactId>security-core-api</artifactId>
         </dependency>
-        <dependency>
-            <groupId>ddf.platform</groupId>
-            <artifactId>platform-configuration</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>ddf.platform</groupId>-->
+<!--            <artifactId>platform-configuration</artifactId>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>ddf.security.sts</groupId>
             <artifactId>security-sts-server</artifactId>

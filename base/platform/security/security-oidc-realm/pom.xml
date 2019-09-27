@@ -41,10 +41,10 @@
             <groupId>ddf.security.encryption</groupId>
             <artifactId>security-encryption-api</artifactId>
         </dependency>
-        <dependency>
-            <groupId>ddf.platform</groupId>
-            <artifactId>platform-configuration</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>ddf.platform</groupId>-->
+<!--            <artifactId>platform-configuration</artifactId>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>ddf.security.policy</groupId>
             <artifactId>security-policy-api</artifactId>

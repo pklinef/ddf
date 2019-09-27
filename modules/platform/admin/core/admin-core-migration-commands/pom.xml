@@ -11,20 +11,18 @@
  * <http://www.gnu.org/licenses/lgpl.html>.
  *
  **/
-
- -->
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>ddf.admin.core</groupId>
+    <groupId>ddf.modules.admin.core</groupId>
     <artifactId>admin-core</artifactId>
     <version>2.22.0-SNAPSHOT</version>
   </parent>
-  <modelVersion>4.0.0</modelVersion>
-
+  <groupId>ddf.admin.core</groupId>
   <artifactId>admin-core-migration-commands</artifactId>
-  <name>DDF :: Admin :: Core :: Migration :: Commands</name>
   <packaging>bundle</packaging>
-
+  <name>DDF :: Admin :: Core :: Migration :: Commands</name>
   <dependencies>
     <dependency>
       <groupId>org.apache.karaf.shell</groupId>
@@ -44,27 +42,27 @@
     <dependency>
       <groupId>ddf.lib</groupId>
       <artifactId>common-system</artifactId>
-      <version>${project.version}</version>
+      <version>${ddf.lib.version}</version>
     </dependency>
     <dependency>
       <groupId>ddf.platform.util</groupId>
       <artifactId>platform-util</artifactId>
-      <version>${project.version}</version>
+      <version>${ddf.base.version}</version>
     </dependency>
     <dependency>
       <groupId>ddf.platform.util</groupId>
       <artifactId>platform-util-unavailableurls</artifactId>
-      <version>${project.version}</version>
+      <version>${ddf.base.version}</version>
     </dependency>
     <dependency>
       <groupId>ddf.security</groupId>
       <artifactId>ddf-security-common</artifactId>
-      <version>${project.version}</version>
+      <version>${ddf.base.version}</version>
     </dependency>
     <dependency>
       <groupId>org.codice.ddf</groupId>
       <artifactId>alerts</artifactId>
-      <version>${project.version}</version>
+      <version>${ddf.lib.version}</version>
     </dependency>
     <dependency>
       <groupId>javax.validation</groupId>
@@ -98,7 +96,6 @@
       <artifactId>jansi</artifactId>
     </dependency>
   </dependencies>
-
   <build>
     <plugins>
       <plugin>
@@ -109,13 +106,11 @@
           <instructions>
             <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
             <Karaf-Commands>*</Karaf-Commands>
-            <Embed-Dependency>
-              platform-util,
+            <Embed-Dependency>platform-util,
               platform-util-unavailableurls,
               ddf-security-common,
-              alerts
-            </Embed-Dependency>
-            <Export-Package />
+              alerts</Embed-Dependency>
+            <Export-Package/>
           </instructions>
         </configuration>
       </plugin>

@@ -13,54 +13,56 @@
  **/
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>catalog-security-pom</artifactId>
-        <groupId>ddf.catalog.security</groupId>
-        <version>2.22.0-SNAPSHOT</version>
-    </parent>
-    <modelVersion>4.0.0</modelVersion>
-
-    <artifactId>catalog-security-xmlattributeplugin</artifactId>
-    <name>DDF :: Catalog :: Security :: XML Attribute Policy Plugin</name>
-    <packaging>bundle</packaging>
-    <dependencies>
-        <dependency>
-            <groupId>ddf.catalog.core</groupId>
-            <artifactId>catalog-core-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>ddf.catalog.core</groupId>
-            <artifactId>catalog-core-api-impl</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>ddf.security.policy</groupId>
-            <artifactId>security-policy-api</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>ddf.platform.util</groupId>
-            <artifactId>platform-util</artifactId>
-        </dependency>
-    </dependencies>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <configuration>
-                    <instructions>
-                        <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
-                        <Embed-Dependency>catalog-core-api-impl;scope=!test,platform-util</Embed-Dependency>
-                        <Export-Package />
-                    </instructions>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>ddf.modules.catalog.security</groupId>
+    <artifactId>catalog-security-pom</artifactId>
+    <version>2.22.0-SNAPSHOT</version>
+  </parent>
+  <groupId>ddf.catalog.security</groupId>
+  <artifactId>catalog-security-xmlattributeplugin</artifactId>
+  <packaging>bundle</packaging>
+  <name>DDF :: Catalog :: Security :: XML Attribute Policy Plugin</name>
+  <dependencies>
+    <dependency>
+      <groupId>ddf.catalog.core</groupId>
+      <artifactId>catalog-core-api</artifactId>
+      <version>${ddf.base.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>ddf.catalog.core</groupId>
+      <artifactId>catalog-core-api-impl</artifactId>
+      <version>${ddf.base.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>ddf.security.policy</groupId>
+      <artifactId>security-policy-api</artifactId>
+      <version>${ddf.base.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>ddf.platform.util</groupId>
+      <artifactId>platform-util</artifactId>
+      <version>${ddf.base.version}</version>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <configuration>
+          <instructions>
+            <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+            <Embed-Dependency>catalog-core-api-impl;scope=!test,platform-util</Embed-Dependency>
+            <Export-Package/>
+          </instructions>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>

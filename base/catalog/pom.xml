@@ -16,7 +16,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>ddf</groupId>
-        <artifactId>ddf</artifactId>
+        <artifactId>base</artifactId>
         <version>2.22.0-SNAPSHOT</version>
     </parent>
     <groupId>ddf.catalog</groupId>
@@ -139,11 +139,11 @@
                 <version>${spring-osgi.version}</version>
                 <scope>test</scope>
             </dependency>
-            <dependency>
-                <groupId>ddf.admin.core</groupId>
-                <artifactId>admin-core-api</artifactId>
-                <version>${project.version}</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>ddf.admin.core</groupId>-->
+<!--                <artifactId>admin-core-api</artifactId>-->
+<!--                <version>${project.version}</version>-->
+<!--            </dependency>-->
             <dependency>
                 <groupId>ddf.platform</groupId>
                 <artifactId>platform</artifactId>
@@ -186,11 +186,11 @@
                 <artifactId>action-core-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <dependency>
-                <groupId>ddf.platform</groupId>
-                <artifactId>platform-configuration</artifactId>
-                <version>${project.version}</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>ddf.platform</groupId>-->
+<!--                <artifactId>platform-configuration</artifactId>-->
+<!--                <version>${project.version}</version>-->
+<!--            </dependency>-->
             <dependency>
                 <groupId>ddf.platform.util</groupId>
                 <artifactId>platform-util</artifactId>
@@ -204,12 +204,12 @@
             <dependency>
                 <groupId>org.codice.ddf</groupId>
                 <artifactId>notifications</artifactId>
-                <version>${project.version}</version>
+                <version>${ddf.lib.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.codice.ddf</groupId>
                 <artifactId>activities</artifactId>
-                <version>${project.version}</version>
+                <version>${ddf.lib.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.abdera</groupId>
@@ -542,23 +542,11 @@
         <module>measure</module>
         <module>common</module>
         <module>core</module>
-        <module>schematron</module>
         <module>transformer</module>
-        <module>plugin</module>
-        <module>opensearch</module>
         <module>rest</module>
         <module>security</module>
-        <module>admin</module>
-        <module>catalog-app</module>
+        <module>catalog-core</module>
         <module>solr</module>
-        <module>ui</module>
-        <module>spatial</module>
-        <module>resourcemanagement</module>
-        <module>ftp</module>
-        <module>validator</module>
-        <module>confluence</module>
-        <module>async</module>
-        <module>migrate</module>
     </modules>
     <build>
         <plugins>

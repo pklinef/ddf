@@ -16,7 +16,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>distribution</artifactId>
-        <groupId>ddf</groupId>
+        <groupId>ddf.distribution.core</groupId>
         <version>2.22.0-SNAPSHOT</version>
     </parent>
     <!--
@@ -102,25 +102,25 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
-                    <execution>
-                        <id>unpack-solr</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>unpack</goal>
-                        </goals>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>ddf</groupId>
-                                    <artifactId>solr-distro</artifactId>
-                                    <version>${project.version}</version>
-                                    <outputDirectory>${setup.folder}</outputDirectory>
-                                    <type>zip</type>
-                                    <classifier>assembly</classifier>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
+<!--                    <execution>-->
+<!--                        <id>unpack-solr</id>-->
+<!--                        <phase>process-resources</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>unpack</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <artifactItems>-->
+<!--                                <artifactItem>-->
+<!--                                    <groupId>ddf</groupId>-->
+<!--                                    <artifactId>solr-distro</artifactId>-->
+<!--                                    <version>${project.version}</version>-->
+<!--                                    <outputDirectory>${setup.folder}</outputDirectory>-->
+<!--                                    <type>zip</type>-->
+<!--                                    <classifier>assembly</classifier>-->
+<!--                                </artifactItem>-->
+<!--                            </artifactItems>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
                     <execution>
                         <id>minimal-copy</id>
                         <phase>generate-resources</phase>
@@ -319,9 +319,9 @@
                             <goal>single</goal>
                         </goals>
                         <configuration>
-                            <archiverConfig>
-                                <duplicateBehavior>skip</duplicateBehavior>
-                            </archiverConfig>
+<!--                            <archiverConfig>-->
+<!--                                <duplicateBehavior>skip</duplicateBehavior>-->
+<!--                            </archiverConfig>-->
                             <descriptors>
                                 <descriptor>src/main/descriptors/bin.xml</descriptor>
                             </descriptors>
@@ -423,12 +423,19 @@
             <type>xml</type>
         </dependency>
         <dependency>
-            <groupId>ddf</groupId>
-            <artifactId>solr-distro</artifactId>
+            <groupId>ddf.features.core</groupId>
+            <artifactId>install-profiles</artifactId>
             <version>${project.version}</version>
-            <classifier>assembly</classifier>
-            <type>zip</type>
+            <classifier>features</classifier>
+            <type>xml</type>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>ddf</groupId>-->
+<!--            <artifactId>solr-distro</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--            <classifier>assembly</classifier>-->
+<!--            <type>zip</type>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>com.google.crypto.tink</groupId>
             <artifactId>tink</artifactId>

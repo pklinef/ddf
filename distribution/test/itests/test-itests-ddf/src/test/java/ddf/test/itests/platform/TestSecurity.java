@@ -44,7 +44,6 @@ import static org.junit.Assert.assertTrue;
 
 import com.jayway.restassured.path.json.JsonPath;
 import ddf.catalog.data.Metacard;
-import ddf.security.SecurityConstants;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -80,7 +79,6 @@ import org.apache.http.ssl.SSLContexts;
 import org.codice.ddf.itests.common.AbstractIntegrationTest;
 import org.codice.ddf.itests.common.catalog.CatalogTestCommons;
 import org.codice.ddf.itests.common.opensearch.OpenSearchFeature;
-import org.codice.ddf.security.common.jaxrs.RestSecurity;
 import org.codice.ddf.test.common.LoggingUtils;
 import org.codice.ddf.test.common.annotations.AfterExam;
 import org.codice.ddf.test.common.annotations.BeforeExam;
@@ -1110,167 +1108,6 @@ public class TestSecurity extends AbstractIntegrationTest {
         .then()
         .log()
         .ifValidationFails();
-  }
-
-  @Test
-  public void testSamlAssertionInHeaders() throws Exception {
-    String onBehalfOf =
-        "<wst:OnBehalfOf>"
-            + "                    <wsse:UsernameToken xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n"
-            + "                        <wsse:Username>admin</wsse:Username>\n"
-            + "                        <wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">admin</wsse:Password>\n"
-            + "                   </wsse:UsernameToken>\n"
-            + "                </wst:OnBehalfOf>\n";
-    String body = getSoapEnvelope(onBehalfOf);
-
-    String assertionHeader =
-        given()
-            .auth()
-            .certificate(
-                KEY_STORE_PATH,
-                PASSWORD,
-                certAuthSettings().sslSocketFactory(SSLSocketFactory.getSystemSocketFactory()))
-            .log()
-            .ifValidationFails()
-            .body(body)
-            .header("Content-Type", "text/xml; charset=utf-8")
-            .header("SOAPAction", "http://docs.oasis-open.org/ws-sx/ws-trust/200512/RST/Issue")
-            .expect()
-            .statusCode(equalTo(200))
-            .when()
-            .post(SERVICE_ROOT.getUrl() + "/SecurityTokenService")
-            .then()
-            .extract()
-            .response()
-            .asString();
-    assertionHeader =
-        assertionHeader.substring(
-            assertionHeader.indexOf("<saml2:Assertion"),
-            assertionHeader.indexOf("</saml2:Assertion>") + "</saml2:Assertion>".length());
-
-    LOGGER.trace(assertionHeader);
-
-    configureRestForSaml(SDK_SOAP_CONTEXT);
-    getSecurityPolicy().waitForSamlAuthReady(ADMIN_PATH.getUrl());
-
-    // try that admin level assertion token on a restricted resource
-    given()
-        .header(
-            SecurityConstants.SAML_HEADER_NAME,
-            "SAML " + RestSecurity.deflateAndBase64Encode(assertionHeader))
-        .when()
-        .get(ADMIN_PATH.getUrl())
-        .then()
-        .log()
-        .ifValidationFails()
-        .assertThat()
-        .statusCode(equalTo(200));
-  }
-
-  @Test
-  public void testGoodHokSamlAssertionInHeaders() throws Exception {
-    String body = getSoapEnvelope(GOOD_HOK_EXAMPLE, null);
-
-    String assertionHeader =
-        given()
-            .auth()
-            .certificate(
-                KEY_STORE_PATH,
-                PASSWORD,
-                certAuthSettings().sslSocketFactory(SSLSocketFactory.getSystemSocketFactory()))
-            .log()
-            .ifValidationFails()
-            .body(body)
-            .header("Content-Type", "text/xml; charset=utf-8")
-            .header("SOAPAction", "http://docs.oasis-open.org/ws-sx/ws-trust/200512/RST/Issue")
-            .expect()
-            .statusCode(equalTo(200))
-            .when()
-            .post(SERVICE_ROOT.getUrl() + "/SecurityTokenService")
-            .then()
-            .extract()
-            .response()
-            .asString();
-    assertionHeader =
-        assertionHeader.substring(
-            assertionHeader.indexOf("<saml2:Assertion"),
-            assertionHeader.indexOf("</saml2:Assertion>") + "</saml2:Assertion>".length());
-
-    LOGGER.trace(assertionHeader);
-
-    configureRestForSaml(SDK_SOAP_CONTEXT);
-    getSecurityPolicy().waitForSamlAuthReady(ADMIN_PATH.getUrl());
-
-    // try that admin level assertion token on a restricted resource
-    given()
-        .auth()
-        .certificate(
-            KEY_STORE_PATH,
-            PASSWORD,
-            certAuthSettings().sslSocketFactory(SSLSocketFactory.getSystemSocketFactory()))
-        .header(
-            SecurityConstants.SAML_HEADER_NAME,
-            "SAML " + RestSecurity.deflateAndBase64Encode(assertionHeader))
-        .when()
-        .get(ADMIN_PATH.getUrl())
-        .then()
-        .log()
-        .ifValidationFails()
-        .assertThat()
-        .statusCode(equalTo(200));
-  }
-
-  @Test
-  public void testBadHokSamlAssertionInHeaders() throws Exception {
-    String body = getSoapEnvelope(BAD_HOK_EXAMPLE, null);
-
-    String assertionHeader =
-        given()
-            .auth()
-            .certificate(
-                KEY_STORE_PATH,
-                PASSWORD,
-                certAuthSettings().sslSocketFactory(SSLSocketFactory.getSystemSocketFactory()))
-            .log()
-            .ifValidationFails()
-            .body(body)
-            .header("Content-Type", "text/xml; charset=utf-8")
-            .header("SOAPAction", "http://docs.oasis-open.org/ws-sx/ws-trust/200512/RST/Issue")
-            .expect()
-            .statusCode(equalTo(200))
-            .when()
-            .post(SERVICE_ROOT.getUrl() + "/SecurityTokenService")
-            .then()
-            .extract()
-            .response()
-            .asString();
-    assertionHeader =
-        assertionHeader.substring(
-            assertionHeader.indexOf("<saml2:Assertion"),
-            assertionHeader.indexOf("</saml2:Assertion>") + "</saml2:Assertion>".length());
-
-    LOGGER.trace(assertionHeader);
-
-    configureRestForSaml(SDK_SOAP_CONTEXT);
-    getSecurityPolicy().waitForSamlAuthReady(ADMIN_PATH.getUrl());
-
-    // try that admin level assertion token on a restricted resource
-    given()
-        .auth()
-        .certificate(
-            KEY_STORE_PATH,
-            PASSWORD,
-            certAuthSettings().sslSocketFactory(SSLSocketFactory.getSystemSocketFactory()))
-        .header(
-            SecurityConstants.SAML_HEADER_NAME,
-            "SAML " + RestSecurity.deflateAndBase64Encode(assertionHeader))
-        .when()
-        .get(ADMIN_PATH.getUrl())
-        .then()
-        .log()
-        .ifValidationFails()
-        .assertThat()
-        .statusCode(equalTo(400));
   }
 
   private String getSoapEnvelope(String onBehalfOf) {

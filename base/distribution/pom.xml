@@ -16,26 +16,23 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>ddf</groupId>
-        <artifactId>ddf</artifactId>
+        <artifactId>base</artifactId>
         <version>2.22.0-SNAPSHOT</version>
     </parent>
+    <version>2.22.0-SNAPSHOT</version>
+    <groupId>ddf.distribution.core</groupId>
     <artifactId>distribution</artifactId>
     <packaging>pom</packaging>
-    <name>DDF Distribution</name>
+    <name>DDF Core Distribution</name>
     <properties>
         <sitename.default>ddf.distribution</sitename.default>
     </properties>
     <modules>
-        <module>solr-distro</module>
         <module>console-branding</module>
         <module>ddf-branding-plugin</module>
         <module>ddf-common</module>
         <module>kernel</module>
-        <module>docs</module>
-        <module>ddf</module>
-        <module>docker</module>
-        <!--Test needs to be the last module because it depends on artifacts from earlier modules-->
-        <module>test</module>
+        <module>ddf-catalog</module>
     </modules>
     <build>
         <pluginManagement>

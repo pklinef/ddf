@@ -16,15 +16,17 @@
           xmlns="http://karaf.apache.org/xmlns/features/v1.3.0"
           xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.3.0 http://karaf.apache.org/xmlns/features/v1.3.0">
 
-    <repository>mvn:ddf.features/apps/${project.version}/xml/features</repository>
+    <repository>mvn:ddf.features.core/apps/${project.version}/xml/features</repository>
 
-    <feature name="profile-standard" version="${project.version}"
+    <feature name="profile-catalog" version="${project.version}"
              description="This will install the standard set of DDF applications." start-level="1">
-        <feature>ddf-boot-features</feature>
-        <feature>catalog-app</feature>
-        <feature>search-ui-app</feature>
+        <feature>ddf-core</feature>
+        <feature>security-core</feature>
+        <feature>platform-core</feature>
+        <feature>catalog-core</feature>
         <feature>solr-app</feature>
-        <feature>spatial-app</feature>
+<!--        <feature>search-ui-app</feature>-->
+<!--        <feature>spatial-app</feature>-->
     </feature>
 
     <feature name="profile-minimum" version="${project.version}"
@@ -32,15 +34,15 @@
              start-level="2">
     </feature>
 
-    <feature name="profile-development" version="${project.version}"
-             description="This will install all the applications for development purposes."
-             start-level="3">
-        <feature>profile-standard</feature>
-        <feature>resourcemanagement-app</feature>
-        <feature>registry-app</feature>
+<!--    <feature name="profile-development" version="${project.version}"-->
+<!--             description="This will install all the applications for development purposes."-->
+<!--             start-level="3">-->
+<!--        <feature>profile-standard</feature>-->
+<!--        <feature>resourcemanagement-app</feature>-->
+<!--        <feature>registry-app</feature>-->
 
-        <!--DDF-4427: The slow startup of opendj can be long enough to cause dependency waits to timeout. Uncomment once slow startup has been addressed.-->
-        <!--<feature>opendj-embedded</feature>-->
-    </feature>
+<!--        &lt;!&ndash;DDF-4427: The slow startup of opendj can be long enough to cause dependency waits to timeout. Uncomment once slow startup has been addressed.&ndash;&gt;-->
+<!--        &lt;!&ndash;<feature>opendj-embedded</feature>&ndash;&gt;-->
+<!--    </feature>-->
 
 </features>

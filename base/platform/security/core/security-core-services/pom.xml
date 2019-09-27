@@ -66,11 +66,11 @@
             <artifactId>security-core-api</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>ddf.platform</groupId>
-            <artifactId>platform-configuration</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>ddf.platform</groupId>-->
+<!--            <artifactId>platform-configuration</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>ddf.security.handler</groupId>
             <artifactId>security-handler-api</artifactId>
