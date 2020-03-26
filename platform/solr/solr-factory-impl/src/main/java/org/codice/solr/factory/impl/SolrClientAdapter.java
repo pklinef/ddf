@@ -446,7 +446,15 @@ public final class SolrClientAdapter extends SolrClientProxy
   // which goes throw getProxiedClient() which would throw back an unavailable error instead of
   // returning the response
   public SolrPingResponse ping() throws SolrServerException, IOException {
-    return ping("from the API");
+    return ping(true, null);
+  }
+
+  @Override
+  // overridden to always send the ping to the client; avoiding the intercept in handle()
+  // which goes throw getProxiedClient() which would throw back an unavailable error instead of
+  // returning the response
+  public SolrPingResponse ping(String collection) throws SolrServerException, IOException {
+    return ping(true, collection);
   }
 
   @Override
@@ -786,15 +794,22 @@ public final class SolrClientAdapter extends SolrClientProxy
   }
 
   private SolrPingResponse backgroundPing() throws SolrServerException, IOException {
-    return ping("in the background");
+    return ping(false, null);
   }
 
   @SuppressWarnings("squid:S1181" /* bubbling out VirtualMachineError */)
-  private SolrPingResponse ping(String how) throws SolrServerException, IOException {
+  private SolrPingResponse ping(boolean fromApi, String collection)
+      throws SolrServerException, IOException {
+    String how = fromApi ? "from the API" : "in the background";
     LOGGER.debug("Solr({}): pinging the client {}", core, how);
     try {
       lastPing.set(System.currentTimeMillis());
-      final SolrPingResponse response = pingClient.ping();
+      final SolrPingResponse response;
+      if (collection != null) {
+        response = pingClient.ping(collection);
+      } else {
+        response = pingClient.ping();
+      }
 
       if (response == null) {
         LOGGER.debug(SolrClientAdapter.FAILED_TO_PING, core, "null response");
