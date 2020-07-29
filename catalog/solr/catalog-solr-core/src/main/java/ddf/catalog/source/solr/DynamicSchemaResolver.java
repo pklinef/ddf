@@ -46,6 +46,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -280,21 +281,43 @@ public class DynamicSchemaResolver implements ConfigurationListener {
               && solrInputDocument.getFieldValue(
                       formatIndexName + getSpecialIndexSuffix(AttributeFormat.STRING))
                   == null) {
-            List<String> parsedTexts = parseTextFrom(attributeValues);
+            List<List<String>> parsedTexts =
+                attributeValues.stream()
+                    .filter(Objects::nonNull)
+                    .map(Object::toString)
+                    .map(DynamicSchemaResolver::parseTextFrom)
+                    .collect(Collectors.toList());
 
-            // parsedTexts => *_txt_tokenized
+            // truncatedValues => *_txt
+            List<String> truncatedValues =
+                parsedTexts.stream()
+                    .flatMap(Collection::stream)
+                    .filter(Objects::nonNull)
+                    .map(DynamicSchemaResolver::truncateAsUTF8)
+                    .collect(Collectors.toList());
+
+            solrInputDocument.addField(
+                ad.getName() + getFieldSuffix(AttributeFormat.STRING), truncatedValues);
+
+            // joinedTexts => *_txt_tokenized
+            String joinedTexts =
+                parsedTexts.stream()
+                    .flatMap(Collection::stream)
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.joining(" "));
+
             String specialStringIndexName =
                 ad.getName()
                     + getFieldSuffix(AttributeFormat.STRING)
                     + getSpecialIndexSuffix(AttributeFormat.STRING);
-            solrInputDocument.addField(specialStringIndexName, parsedTexts);
+            solrInputDocument.addField(specialStringIndexName, joinedTexts);
           } else if (AttributeFormat.STRING.equals(format)
               && solrInputDocument.getFieldValue(
                       ad.getName() + getFieldSuffix(AttributeFormat.STRING))
                   == null) {
             List<Serializable> truncatedValues =
                 attributeValues.stream()
-                    .map(value -> value != null ? truncateAsUTF8(value.toString()) : value)
+                    .map(value -> value != null ? truncateAsUTF8(value.toString()) : null)
                     .collect(Collectors.toList());
             // *_txt
             solrInputDocument.addField(
@@ -367,7 +390,7 @@ public class DynamicSchemaResolver implements ConfigurationListener {
    * Truncation that takes multibyte UTF-8 characters and surrogate pairs into consideration.
    * https://stackoverflow.com/questions/119328/how-do-i-truncate-a-java-string-to-fit-in-a-given-number-of-bytes-once-utf-8-en
    */
-  private String truncateAsUTF8(String value) {
+  private static String truncateAsUTF8(String value) {
     int b = 0;
     int skip;
     for (int i = 0; i < value.length(); i = i + 1 + skip) {
@@ -812,52 +835,46 @@ public class DynamicSchemaResolver implements ConfigurationListener {
   }
 
   /**
-   * Given xml as a string, this method will parse out element text and CDATA text. It separates
-   * each by one space character.
+   * Given xml as a string, this method will parse out element text and CDATA text.
    *
-   * @param xmlDatas List of XML as {@code String}
+   * @param xml XML as {@code String}
    * @return parsed CDATA and element text
    */
   @SuppressWarnings(
       "squid:S2093" /* try-with-resource will throw IOException with InputStream and we do not care to get that exception */)
-  private List<String> parseTextFrom(List<Serializable> xmlDatas) {
+  private static List<String> parseTextFrom(String xml) {
 
-    StringBuilder builder = new StringBuilder();
     List<String> parsedTexts = new ArrayList<>();
     XMLStreamReader xmlStreamReader = null;
     StringReader sr = null;
-    long starttime = System.currentTimeMillis();
+    long startTime = System.currentTimeMillis();
 
     try {
-      for (Serializable xmlData : xmlDatas) {
-        // xml parser does not handle leading whitespace
-        sr = new StringReader(xmlData.toString());
-        xmlStreamReader = XML_INPUT_FACTORY.createXMLStreamReader(sr);
+      // xml parser does not handle leading whitespace
+      sr = new StringReader(xml);
+      xmlStreamReader = XML_INPUT_FACTORY.createXMLStreamReader(sr);
 
-        while (xmlStreamReader.hasNext()) {
-          int event = xmlStreamReader.next();
+      while (xmlStreamReader.hasNext()) {
+        int event = xmlStreamReader.next();
 
-          if (event == XMLStreamConstants.CHARACTERS || event == XMLStreamConstants.CDATA) {
+        if (event == XMLStreamConstants.CHARACTERS || event == XMLStreamConstants.CDATA) {
 
-            String text = xmlStreamReader.getText();
+          String text = xmlStreamReader.getText();
+
+          if (StringUtils.isNotBlank(text)) {
+            parsedTexts.add(text.trim());
+          }
+        }
+        if (event == XMLStreamConstants.START_ELEMENT) {
+          for (int i = 0; i < xmlStreamReader.getAttributeCount(); i++) {
+
+            String text = xmlStreamReader.getAttributeValue(i);
 
             if (StringUtils.isNotBlank(text)) {
-              builder.append(" ").append(text.trim());
-            }
-          }
-          if (event == XMLStreamConstants.START_ELEMENT) {
-            for (int i = 0; i < xmlStreamReader.getAttributeCount(); i++) {
-
-              String text = xmlStreamReader.getAttributeValue(i);
-
-              if (StringUtils.isNotBlank(text)) {
-                builder.append(" ").append(text.trim());
-              }
+              parsedTexts.add(text.trim());
             }
           }
         }
-        parsedTexts.add(builder.toString());
-        builder.setLength(0);
       }
     } catch (XMLStreamException e1) {
       LOGGER.info(
@@ -874,7 +891,7 @@ public class DynamicSchemaResolver implements ConfigurationListener {
     }
     long endTime = System.currentTimeMillis();
 
-    LOGGER.debug("Parsing took {} ms", endTime - starttime);
+    LOGGER.debug("Parsing took {} ms", endTime - startTime);
 
     return parsedTexts;
   }
