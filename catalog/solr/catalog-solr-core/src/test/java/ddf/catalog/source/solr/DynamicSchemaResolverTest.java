@@ -36,6 +36,7 @@ import ddf.catalog.data.MetacardType;
 import ddf.catalog.data.impl.AttributeDescriptorImpl;
 import ddf.catalog.data.impl.BasicTypes;
 import ddf.catalog.data.impl.MetacardImpl;
+import ddf.catalog.data.impl.MetacardTypeImpl;
 import ddf.catalog.source.solr.json.MetacardTypeMapperFactory;
 import java.io.IOException;
 import java.io.Serializable;
@@ -54,7 +55,7 @@ import org.mockito.ArgumentCaptor;
 
 public class DynamicSchemaResolverTest {
 
-  private static final int INITIAL_FIELDS_CACHE_COUNT = 5;
+  private static final int INITIAL_FIELDS_CACHE_COUNT = 119;
 
   private static final ObjectMapper METACARD_TYPE_MAPPER =
       MetacardTypeMapperFactory.newObjectMapper();
@@ -68,11 +69,17 @@ public class DynamicSchemaResolverTest {
 
   @Test
   public void testAddMetacardType() {
-    assertThat(dynamicSchemaResolver.getAnonymousField(Metacard.TITLE), empty());
+    assertThat(dynamicSchemaResolver.getAnonymousField("test"), empty());
 
-    dynamicSchemaResolver.addMetacardType(MetacardImpl.BASIC_METACARD);
+    dynamicSchemaResolver.addMetacardType(
+        new MetacardTypeImpl(
+            "test",
+            MetacardImpl.BASIC_METACARD,
+            Collections.singleton(
+                new AttributeDescriptorImpl(
+                    "test", true, true, true, true, BasicTypes.STRING_TYPE))));
 
-    assertThat(dynamicSchemaResolver.getAnonymousField(Metacard.TITLE), hasSize(1));
+    assertThat(dynamicSchemaResolver.getAnonymousField("test"), hasSize(1));
   }
 
   /**

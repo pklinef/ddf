@@ -19,13 +19,11 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import ddf.catalog.data.AttributeDescriptor;
-import ddf.catalog.data.AttributeType;
 import ddf.catalog.data.AttributeType.AttributeFormat;
 import ddf.catalog.data.Metacard;
 import ddf.catalog.data.MetacardCreationException;
 import ddf.catalog.data.MetacardType;
-import ddf.catalog.data.impl.AttributeDescriptorImpl;
-import ddf.catalog.data.impl.MetacardTypeImpl;
+import ddf.catalog.data.impl.MetacardImpl;
 import ddf.catalog.data.types.experimental.Extracted;
 import ddf.catalog.source.solr.json.MetacardTypeMapperFactory;
 import java.io.ByteArrayInputStream;
@@ -184,6 +182,7 @@ public class DynamicSchemaResolver {
     fieldsCache.add(SchemaFields.METACARD_TYPE_OBJECT_FIELD_NAME);
 
     addAdditionalFields(this, additionalFields);
+    addMetacardType(MetacardImpl.BASIC_METACARD);
   }
 
   public DynamicSchemaResolver() {
@@ -203,6 +202,11 @@ public class DynamicSchemaResolver {
 
   @SuppressWarnings("WeakerAccess" /* access needed by blueprint */)
   public void addMetacardType(MetacardType metacardType) {
+    try {
+      cache(metacardType);
+    } catch (MetacardCreationException e) {
+      LOGGER.info("Unable to add metacard type to cache", e);
+    }
     metacardType.getAttributeDescriptors().forEach(this::addToFieldsCache);
   }
 
@@ -346,27 +350,7 @@ public class DynamicSchemaResolver {
       }
     }
 
-    /*
-     * Lastly the metacardType must be added to the solr document. These are internal fields
-     */
-    String schemaName = String.format("%s#%s", schema.getName(), schema.hashCode());
-    solrInputDocument.addField(SchemaFields.METACARD_TYPE_FIELD_NAME, schemaName);
-    byte[] metacardTypeBytes = metacardTypeNameToSerialCache.getIfPresent(schemaName);
-
-    if (metacardTypeBytes == null) {
-      MetacardType coreMetacardType =
-          new MetacardTypeImpl(
-              schema.getName(), convertAttributeDescriptors(schema.getAttributeDescriptors()));
-
-      metacardTypesCache.put(schemaName, coreMetacardType);
-
-      metacardTypeBytes = serialize(coreMetacardType);
-      metacardTypeNameToSerialCache.put(schemaName, metacardTypeBytes);
-
-      addToFieldsCache(coreMetacardType.getAttributeDescriptors());
-    }
-
-    solrInputDocument.addField(SchemaFields.METACARD_TYPE_OBJECT_FIELD_NAME, metacardTypeBytes);
+    addMetacardType(schema, solrInputDocument);
   }
 
   private String truncate(String value, int length) {
@@ -465,6 +449,58 @@ public class DynamicSchemaResolver {
   private double truncate(double coordinate) {
     double scale = Math.pow(10, 8);
     return Math.round(coordinate * scale) / scale;
+  }
+
+  private void addMetacardType(MetacardType type, SolrInputDocument doc)
+      throws MetacardCreationException {
+    byte[] typeBytes = cache(type);
+    doc.addField(SchemaFields.METACARD_TYPE_OBJECT_FIELD_NAME, typeBytes);
+    doc.addField(SchemaFields.METACARD_TYPE_FIELD_NAME, metacardTypeId(type));
+  }
+
+  @SuppressWarnings(
+      "squid:S2093" /* try-with-resource will throw IOException with InputStream and we do not care to get that exception */)
+  public MetacardType getMetacardType(SolrDocument doc) throws MetacardCreationException {
+    String mTypeFieldName = doc.getFirstValue(SchemaFields.METACARD_TYPE_FIELD_NAME).toString();
+
+    MetacardType type = metacardTypesCache.getIfPresent(mTypeFieldName);
+
+    if (type != null) {
+      return type;
+    }
+
+    byte[] bytes = (byte[]) doc.getFirstValue(SchemaFields.METACARD_TYPE_OBJECT_FIELD_NAME);
+    try {
+      type = METACARD_TYPE_MAPPER.readValue(bytes, MetacardType.class);
+    } catch (IOException e) {
+      LOGGER.info("Failed reading stored metacard type", e);
+      throw new MetacardCreationException(COULD_NOT_READ_METACARD_TYPE_MESSAGE, e);
+    }
+
+    cache(type);
+    return type;
+  }
+
+  private String metacardTypeId(MetacardType type) {
+    return String.format("%s#%s", type.getName(), type.hashCode());
+  }
+
+  private byte[] cache(MetacardType type) throws MetacardCreationException {
+    String metacardTypeId = metacardTypeId(type);
+    byte[] metacardTypeBytes = metacardTypeNameToSerialCache.getIfPresent(metacardTypeId);
+    if (metacardTypeBytes == null) {
+      try {
+        metacardTypeBytes = METACARD_TYPE_MAPPER.writeValueAsBytes(type);
+
+        metacardTypeNameToSerialCache.put(metacardTypeId, metacardTypeBytes);
+        metacardTypesCache.put(metacardTypeId, type);
+        addToFieldsCache(type.getAttributeDescriptors());
+      } catch (JsonProcessingException e) {
+        LOGGER.info("Failed writing metacard type to store", e);
+        throw new MetacardCreationException(COULD_NOT_READ_METACARD_TYPE_MESSAGE, e);
+      }
+    }
+    return metacardTypeBytes;
   }
 
   /**
@@ -628,32 +664,6 @@ public class DynamicSchemaResolver {
     return schemaFields.getFieldSuffix(format);
   }
 
-  @SuppressWarnings(
-      "squid:S2093" /* try-with-resource will throw IOException with InputStream and we do not care to get that exception */)
-  public MetacardType getMetacardType(SolrDocument doc) throws MetacardCreationException {
-    String mTypeFieldName = doc.getFirstValue(SchemaFields.METACARD_TYPE_FIELD_NAME).toString();
-
-    MetacardType cachedMetacardType = metacardTypesCache.getIfPresent(mTypeFieldName);
-
-    if (cachedMetacardType != null) {
-      return cachedMetacardType;
-    }
-
-    byte[] bytes = (byte[]) doc.getFirstValue(SchemaFields.METACARD_TYPE_OBJECT_FIELD_NAME);
-    try {
-      cachedMetacardType = METACARD_TYPE_MAPPER.readValue(bytes, MetacardType.class);
-    } catch (IOException e) {
-      LOGGER.info("IO exception loading cached metacard type", e);
-      throw new MetacardCreationException(COULD_NOT_READ_METACARD_TYPE_MESSAGE);
-    }
-
-    metacardTypeNameToSerialCache.put(mTypeFieldName, bytes);
-    metacardTypesCache.put(mTypeFieldName, cachedMetacardType);
-    addToFieldsCache(cachedMetacardType.getAttributeDescriptors());
-
-    return cachedMetacardType;
-  }
-
   String getCaseSensitiveField(
       String mappedPropertyName, Map<String, Serializable> enabledFeatures) {
     if (isPhoneticsEnabled(enabledFeatures)
@@ -736,14 +746,6 @@ public class DynamicSchemaResolver {
           descriptor.getName()
               + schemaFields.getFieldSuffix(format)
               + getSpecialIndexSuffix(format));
-    }
-  }
-
-  private byte[] serialize(MetacardType anywhereMType) throws MetacardCreationException {
-    try {
-      return METACARD_TYPE_MAPPER.writeValueAsBytes(anywhereMType);
-    } catch (JsonProcessingException e) {
-      throw new MetacardCreationException(COULD_NOT_READ_METACARD_TYPE_MESSAGE, e);
     }
   }
 
@@ -839,25 +841,6 @@ public class DynamicSchemaResolver {
     LOGGER.debug("Parsing took {} ms", endTime - starttime);
 
     return parsedTexts;
-  }
-
-  private Set<AttributeDescriptor> convertAttributeDescriptors(
-      Set<AttributeDescriptor> attributeDescriptors) {
-    Set<AttributeDescriptor> newAttributeDescriptors = new HashSet<>(attributeDescriptors.size());
-
-    for (AttributeDescriptor attributeDescriptor : attributeDescriptors) {
-      String name = attributeDescriptor.getName();
-      boolean isIndexed = attributeDescriptor.isIndexed();
-      boolean isStored = attributeDescriptor.isStored();
-      boolean isTokenized = attributeDescriptor.isTokenized();
-      boolean isMultiValued = attributeDescriptor.isMultiValued();
-      AttributeType<?> attributeType = attributeDescriptor.getType();
-      newAttributeDescriptors.add(
-          new AttributeDescriptorImpl(
-              name, isIndexed, isStored, isTokenized, isMultiValued, attributeType));
-    }
-
-    return newAttributeDescriptors;
   }
 
   String getSortKey(String field) {
