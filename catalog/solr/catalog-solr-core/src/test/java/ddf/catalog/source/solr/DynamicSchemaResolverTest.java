@@ -20,10 +20,8 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -51,11 +49,10 @@ import java.util.stream.Collectors;
 import org.apache.solr.common.SolrInputDocument;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
 
 public class DynamicSchemaResolverTest {
 
-  private static final int INITIAL_FIELDS_CACHE_COUNT = 119;
+  private static final int INITIAL_FIELDS_CACHE_COUNT = 118;
 
   private static final ObjectMapper METACARD_TYPE_MAPPER =
       MetacardTypeMapperFactory.newObjectMapper();
@@ -82,49 +79,54 @@ public class DynamicSchemaResolverTest {
     assertThat(dynamicSchemaResolver.getAnonymousField("test"), hasSize(1));
   }
 
-  /**
-   * Verify that when a metacard type has attribute descriptors that inherit from
-   * AttributeDescriptorImpl, the attribute descriptors are recreated as AttributeDescriptorsImpls
-   * before serialization into the solr cache.
-   */
-  @Test
-  public void testAddFields() throws Exception {
-    // Setup
-    String metacardTypeName = "states";
-    Set<AttributeDescriptor> attributeDescriptors = new HashSet<>(1);
-    String propertyName = "title";
-    String name = metacardTypeName + "." + propertyName;
-    boolean indexed = true;
-    boolean stored = true;
-    boolean tokenized = false;
-    boolean multiValued = false;
-    attributeDescriptors.add(
-        new TestAttributeDescriptorImpl(
-            name, propertyName, indexed, stored, tokenized, multiValued, BasicTypes.OBJECT_TYPE));
-    Serializable mockValue = mock(Serializable.class);
-    Attribute mockAttribute = mock(Attribute.class);
-    when(mockAttribute.getValue()).thenReturn(mockValue);
-    Metacard mockMetacard = mock(Metacard.class, RETURNS_DEEP_STUBS);
-    when(mockMetacard.getMetacardType().getName()).thenReturn(metacardTypeName);
-    when(mockMetacard.getMetacardType().getAttributeDescriptors()).thenReturn(attributeDescriptors);
-    when(mockMetacard.getAttribute(name)).thenReturn(mockAttribute);
-    ArgumentCaptor<byte[]> metacardTypeBytes = ArgumentCaptor.forClass(byte[].class);
-    SolrInputDocument mockSolrInputDocument = mock(SolrInputDocument.class);
-
-    // Perform Test
-    dynamicSchemaResolver.addFields(mockMetacard, mockSolrInputDocument);
-
-    // Verify: Verify that TestAttributeDescriptorImpl has been recreated as a
-    // AttributeDescriptorImpl.
-    verify(mockSolrInputDocument)
-        .addField(eq(SchemaFields.METACARD_TYPE_OBJECT_FIELD_NAME), metacardTypeBytes.capture());
-    byte[] serializedMetacardType = metacardTypeBytes.getValue();
-    MetacardType metacardType = deserializeMetacardType(serializedMetacardType);
-    for (AttributeDescriptor attributeDescriptor : metacardType.getAttributeDescriptors()) {
-      assertThat(
-          attributeDescriptor.getClass().getName(), is(AttributeDescriptorImpl.class.getName()));
-    }
-  }
+  //  /**
+  //   * Verify that when a metacard type has attribute descriptors that inherit from
+  //   * AttributeDescriptorImpl, the attribute descriptors are recreated as
+  // AttributeDescriptorsImpls
+  //   * before serialization into the solr cache.
+  //   */
+  //  @Test
+  //  public void testAddFields() throws Exception {
+  //    // Setup
+  //    String metacardTypeName = "states";
+  //    Set<AttributeDescriptor> attributeDescriptors = new HashSet<>(1);
+  //    String propertyName = "title";
+  //    String name = metacardTypeName + "." + propertyName;
+  //    boolean indexed = true;
+  //    boolean stored = true;
+  //    boolean tokenized = false;
+  //    boolean multiValued = false;
+  //    attributeDescriptors.add(
+  //        new TestAttributeDescriptorImpl(
+  //            name, propertyName, indexed, stored, tokenized, multiValued,
+  // BasicTypes.OBJECT_TYPE));
+  //    Serializable mockValue = mock(Serializable.class);
+  //    Attribute mockAttribute = mock(Attribute.class);
+  //    when(mockAttribute.getValue()).thenReturn(mockValue);
+  //    Metacard mockMetacard = mock(Metacard.class, RETURNS_DEEP_STUBS);
+  //    when(mockMetacard.getMetacardType().getName()).thenReturn(metacardTypeName);
+  //
+  // when(mockMetacard.getMetacardType().getAttributeDescriptors()).thenReturn(attributeDescriptors);
+  //    when(mockMetacard.getAttribute(name)).thenReturn(mockAttribute);
+  //    ArgumentCaptor<byte[]> metacardTypeBytes = ArgumentCaptor.forClass(byte[].class);
+  //    SolrInputDocument mockSolrInputDocument = mock(SolrInputDocument.class);
+  //
+  //    // Perform Test
+  //    dynamicSchemaResolver.addFields(mockMetacard, mockSolrInputDocument);
+  //
+  //    // Verify: Verify that TestAttributeDescriptorImpl has been recreated as a
+  //    // AttributeDescriptorImpl.
+  //    verify(mockSolrInputDocument)
+  //        .addField(eq(SchemaFields.METACARD_TYPE_OBJECT_FIELD_NAME),
+  // metacardTypeBytes.capture());
+  //    byte[] serializedMetacardType = metacardTypeBytes.getValue();
+  //    MetacardType metacardType = deserializeMetacardType(serializedMetacardType);
+  //    for (AttributeDescriptor attributeDescriptor : metacardType.getAttributeDescriptors()) {
+  //      assertThat(
+  //          attributeDescriptor.getClass().getName(),
+  // is(AttributeDescriptorImpl.class.getName()));
+  //    }
+  //  }
 
   /**
    * Verify that when the metadata size limit is set to 10 (less than the size of what is being

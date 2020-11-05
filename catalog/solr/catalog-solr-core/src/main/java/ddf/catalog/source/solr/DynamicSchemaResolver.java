@@ -113,10 +113,7 @@ public class DynamicSchemaResolver {
 
   private static final List<String> PRIVATE_SOLR_FIELDS =
       Arrays.asList(
-          SOLR_CLOUD_VERSION_FIELD,
-          SchemaFields.METACARD_TYPE_FIELD_NAME,
-          SchemaFields.METACARD_TYPE_OBJECT_FIELD_NAME,
-          SCORE_FIELD_NAME);
+          SOLR_CLOUD_VERSION_FIELD, SchemaFields.METACARD_TYPE_FIELD_NAME, SCORE_FIELD_NAME);
 
   private static final GeometryFactory GEOMETRY_FACTORY = new GeometryFactory();
 
@@ -179,7 +176,6 @@ public class DynamicSchemaResolver {
         Metacard.ID + SchemaFields.TEXT_SUFFIX + SchemaFields.TOKENIZED + SchemaFields.HAS_CASE);
 
     fieldsCache.add(SchemaFields.METACARD_TYPE_FIELD_NAME);
-    fieldsCache.add(SchemaFields.METACARD_TYPE_OBJECT_FIELD_NAME);
 
     addAdditionalFields(this, additionalFields);
     addMetacardType(MetacardImpl.BASIC_METACARD);
@@ -454,7 +450,6 @@ public class DynamicSchemaResolver {
   private void addMetacardType(MetacardType type, SolrInputDocument doc)
       throws MetacardCreationException {
     byte[] typeBytes = cache(type);
-    doc.addField(SchemaFields.METACARD_TYPE_OBJECT_FIELD_NAME, typeBytes);
     doc.addField(SchemaFields.METACARD_TYPE_FIELD_NAME, metacardTypeId(type));
   }
 
@@ -467,18 +462,10 @@ public class DynamicSchemaResolver {
 
     if (type != null) {
       return type;
+    } else {
+      LOGGER.info("Failed reading stored metacard type");
+      throw new MetacardCreationException(COULD_NOT_READ_METACARD_TYPE_MESSAGE);
     }
-
-    byte[] bytes = (byte[]) doc.getFirstValue(SchemaFields.METACARD_TYPE_OBJECT_FIELD_NAME);
-    try {
-      type = METACARD_TYPE_MAPPER.readValue(bytes, MetacardType.class);
-    } catch (IOException e) {
-      LOGGER.info("Failed reading stored metacard type", e);
-      throw new MetacardCreationException(COULD_NOT_READ_METACARD_TYPE_MESSAGE, e);
-    }
-
-    cache(type);
-    return type;
   }
 
   private String metacardTypeId(MetacardType type) {

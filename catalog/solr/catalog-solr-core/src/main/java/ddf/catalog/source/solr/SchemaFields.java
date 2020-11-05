@@ -61,8 +61,6 @@ public class SchemaFields {
 
   public static final String METACARD_TYPE_FIELD_NAME = "metacard_type_name" + TEXT_SUFFIX;
 
-  public static final String METACARD_TYPE_OBJECT_FIELD_NAME = "metacard_type" + OBJECT_SUFFIX;
-
   public static final String SORT_SUFFIX = "_sort";
 
   protected static final Map<String, AttributeFormat> SUFFIX_TO_FORMAT_MAP;
