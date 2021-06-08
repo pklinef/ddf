@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.security.AccessController;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
+import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
@@ -92,6 +93,10 @@ public class TikaMetadataExtractor {
     } finally {
       IOUtils.closeQuietly(inputStream);
     }
+  }
+
+  public List<String> getPages() {
+    return bodyAndMetadataContentHandler.getPages();
   }
 
   public String getBodyText() {

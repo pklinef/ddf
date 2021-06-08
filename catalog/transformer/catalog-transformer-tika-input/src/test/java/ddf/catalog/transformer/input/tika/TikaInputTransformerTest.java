@@ -521,14 +521,17 @@ public class TikaInputTransformerTest {
         Thread.currentThread().getContextClassLoader().getResourceAsStream("testPDF.pdf");
     Metacard metacard = transform(stream);
     assertNotNull(metacard);
-    assertThat(metacard.getTitle(), is("Apache Tika - Apache Tika"));
-    assertThat(convertDate(metacard.getCreatedDate()), is("2007-09-15 09:02:31 UTC"));
-    assertThat(convertDate(metacard.getModifiedDate()), is("2007-09-15 09:02:31 UTC"));
+    assertThat(metacard.getTitle(), is("PDFParser (Apache Tika 1.26 API)"));
+    assertThat(convertDate(metacard.getCreatedDate()), is("2021-05-25 20:45:27 UTC"));
+    assertThat(convertDate(metacard.getModifiedDate()), is("2021-05-25 20:45:27 UTC"));
     assertNotNull(metacard.getMetadata());
     assertThat(
-        metacard.getMetadata(), containsString("<meta name=\"xmpTPg:NPages\" content=\"1\" />"));
+        metacard.getMetadata(), containsString("<meta name=\"xmpTPg:NPages\" content=\"5\" />"));
     assertThat(metacard.getContentTypeName(), is("application/pdf"));
     assertThat(metacard.getAttribute(Core.DATATYPE).getValue(), is(TEXT));
+    assertThat(
+        metacard.getAttribute(Extracted.EXTRACTED_TEXT).getValues().get(4).toString(),
+        containsString("5 of 5"));
   }
 
   @Test
@@ -607,7 +610,7 @@ public class TikaInputTransformerTest {
     assertThat(convertDate(metacard.getModifiedDate()), is("2010-06-29 06:34:35 UTC"));
     assertNotNull(metacard.getMetadata());
     assertThat(
-        metacard.getAttribute(Extracted.EXTRACTED_TEXT).getValue().toString(),
+        metacard.getAttribute(Extracted.EXTRACTED_TEXT).getValues().get(1).toString(),
         containsString("content as every other file being tested for tika content parsing"));
     assertThat(
         metacard.getContentTypeName(),

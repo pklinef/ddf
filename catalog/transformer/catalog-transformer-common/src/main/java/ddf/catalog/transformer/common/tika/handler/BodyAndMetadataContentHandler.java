@@ -15,6 +15,7 @@ package ddf.catalog.transformer.common.tika.handler;
 
 import ddf.catalog.transformer.common.tika.TikaMetadataExtractor;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import org.apache.tika.sax.BodyContentHandler;
 import org.apache.tika.sax.WriteOutContentHandler;
 import org.xml.sax.Attributes;
@@ -29,6 +30,8 @@ public class BodyAndMetadataContentHandler extends DefaultHandler {
 
   private final XmlMetadataContentHandler xmlMetadataContentHandler;
 
+  private final PagedContentHandler pagedContentHandler;
+
   private boolean bodyWriteLimitReached = false;
 
   public BodyAndMetadataContentHandler(int bodyWriteLimit, int metadataWriteLimit) {
@@ -36,10 +39,13 @@ public class BodyAndMetadataContentHandler extends DefaultHandler {
         new XmlMetadataContentHandler(StandardCharsets.UTF_8.toString(), metadataWriteLimit);
     this.writeOutContentHandler = new WriteOutContentHandler(bodyWriteLimit);
     this.bodyContentHandler = new BodyContentHandler(writeOutContentHandler);
+    this.pagedContentHandler = new PagedContentHandler(bodyWriteLimit);
   }
 
   @Override
   public void startPrefixMapping(String prefix, String uri) throws SAXException {
+    pagedContentHandler.startPrefixMapping(prefix, uri);
+
     if (!xmlMetadataContentHandler.isWriteLimitReached()) {
       xmlMetadataContentHandler.startPrefixMapping(prefix, uri);
     }
@@ -51,6 +57,8 @@ public class BodyAndMetadataContentHandler extends DefaultHandler {
 
   @Override
   public void endPrefixMapping(String prefix) throws SAXException {
+    pagedContentHandler.endPrefixMapping(prefix);
+
     if (!xmlMetadataContentHandler.isWriteLimitReached()) {
       xmlMetadataContentHandler.endPrefixMapping(prefix);
     }
@@ -62,6 +70,8 @@ public class BodyAndMetadataContentHandler extends DefaultHandler {
 
   @Override
   public void startDocument() throws SAXException {
+    pagedContentHandler.startDocument();
+
     if (!xmlMetadataContentHandler.isWriteLimitReached()) {
       xmlMetadataContentHandler.startDocument();
     }
@@ -73,6 +83,8 @@ public class BodyAndMetadataContentHandler extends DefaultHandler {
 
   @Override
   public void endDocument() throws SAXException {
+    pagedContentHandler.endDocument();
+
     if (!xmlMetadataContentHandler.isWriteLimitReached()) {
       xmlMetadataContentHandler.endDocument();
     }
@@ -85,6 +97,8 @@ public class BodyAndMetadataContentHandler extends DefaultHandler {
   @Override
   public void startElement(String uri, String localName, String qName, Attributes attributes)
       throws SAXException {
+    pagedContentHandler.startElement(uri, localName, qName, attributes);
+
     if (!xmlMetadataContentHandler.isWriteLimitReached()) {
       xmlMetadataContentHandler.startElement(uri, localName, qName, attributes);
     }
@@ -96,7 +110,8 @@ public class BodyAndMetadataContentHandler extends DefaultHandler {
 
   @Override
   public void endElement(String uri, String localName, String qName) throws SAXException {
-    super.endElement(uri, localName, qName);
+    pagedContentHandler.endElement(uri, localName, qName);
+
     if (!xmlMetadataContentHandler.isWriteLimitReached()) {
       xmlMetadataContentHandler.endElement(uri, localName, qName);
     }
@@ -108,6 +123,8 @@ public class BodyAndMetadataContentHandler extends DefaultHandler {
 
   @Override
   public void characters(char[] ch, int start, int length) throws SAXException {
+    pagedContentHandler.characters(ch, start, length);
+
     if (xmlMetadataContentHandler.okToWrite(length)) {
       xmlMetadataContentHandler.characters(ch, start, length);
     }
@@ -125,6 +142,8 @@ public class BodyAndMetadataContentHandler extends DefaultHandler {
 
   @Override
   public void ignorableWhitespace(char[] ch, int start, int length) throws SAXException {
+    pagedContentHandler.ignorableWhitespace(ch, start, length);
+
     if (xmlMetadataContentHandler.okToWrite(length)) {
       xmlMetadataContentHandler.ignorableWhitespace(ch, start, length);
     }
@@ -142,6 +161,10 @@ public class BodyAndMetadataContentHandler extends DefaultHandler {
 
   public String getBodyText() {
     return bodyContentHandler.toString();
+  }
+
+  public List<String> getPages() {
+    return pagedContentHandler.getPages();
   }
 
   public String getMetadataText() {

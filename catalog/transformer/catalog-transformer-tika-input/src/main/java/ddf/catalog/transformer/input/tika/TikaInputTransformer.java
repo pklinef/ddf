@@ -367,6 +367,7 @@ public class TikaInputTransformer implements InputTransformer {
 
       Metadata metadata;
       String bodyText = null;
+      List<String> pageText;
       String metadataText;
       Metacard metacard = new MetacardImpl(commonTikaMetacardType);
       String contentType = DataType.DATASET.name();
@@ -388,6 +389,7 @@ public class TikaInputTransformer implements InputTransformer {
           metadataText = "";
         }
         bodyText = extractor.getBodyText();
+        pageText = extractor.getPages();
         metadata = extractor.getMetadata();
         contentType = metadata.get(Metadata.CONTENT_TYPE);
         MetacardType metacardType = mergeAttributes(getMetacardType(contentType));
@@ -395,8 +397,13 @@ public class TikaInputTransformer implements InputTransformer {
             MetacardCreator.createMetacard(
                 metadata, id, metadataText, metacardType, useResourceTitleAsTitle);
         if (StringUtils.isNotBlank(bodyText)) {
-          metacard.setAttribute(new AttributeImpl(Extracted.EXTRACTED_TEXT, bodyText));
           processContentMetadataExtractors(bodyText, metacard);
+        }
+
+        if (pageText != null && pageText.size() > 0) {
+          metacard.setAttribute(new AttributeImpl(Extracted.EXTRACTED_TEXT, pageText));
+        } else if (StringUtils.isNotBlank(bodyText)) {
+          metacard.setAttribute(new AttributeImpl(Extracted.EXTRACTED_TEXT, bodyText));
         }
 
         if (StringUtils.isNotBlank(metadataText)) {
